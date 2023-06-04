@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&&text=%F0%9F%90%B3display=swap');
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 8px;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
