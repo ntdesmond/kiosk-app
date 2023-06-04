@@ -21,10 +21,10 @@ module.exports = {
     sourceType: 'module',
     project: ['./tsconfig.json'],
   },
-  ignorePatterns: ['*.cjs', 'dist/', 'build/'],
+  ignorePatterns: ['*.cjs', 'dist*/', 'build*/', 'release/'],
   overrides: [
     {
-      files: ['vite.*.ts'],
+      files: ['vite.*.ts', 'electron/**/*'],
       rules: {
         'import/no-extraneous-dependencies': 0,
       },
