@@ -1,8 +1,14 @@
 {
-  "name": "chakra-react-ts-vite",
+  "name": "uni-feedback-kiosk-app",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
+  "description": "Kiosk user interface application",
+  "author": {
+    "name": "ntdesmond",
+    "url": "https://github.com/ntdesmond"
+  },
+  "license": "WTFPL",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
