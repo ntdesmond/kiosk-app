@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const e=require("electron"),t="electronAPI",n={sendMail:()=>e.ipcRenderer.invoke("send-mail","Test subject","Test body")};e.contextBridge.exposeInMainWorld(t,n);exports.apiName=t;
