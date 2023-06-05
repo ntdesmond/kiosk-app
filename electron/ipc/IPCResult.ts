@@ -1,4 +1,4 @@
-type IPCFailure = { ok: false; error: string };
-type IPCSuccess = { ok: true };
-export type IPCResult<TData> = (IPCSuccess & { data: TData }) | (IPCFailure & { data: undefined });
-export type IPCVoidResult = IPCSuccess | IPCFailure;
+type IpcFailure = { ok: false; error: string };
+type IpcSuccess = { ok: true };
+export type IpcResult<TData> = (IpcSuccess & { data: TData }) | (IpcFailure & { data: undefined });
+export type IpcVoidResult = IpcSuccess | IpcFailure;

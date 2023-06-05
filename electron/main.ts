@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import path from 'node:path';
 import minimist from 'minimist';
-import setupIPC from './ipc/setup';
+import setupIpc from './ipc/setup';
 
 const dist_path = path.join(__dirname, '../dist');
 
@@ -52,6 +52,6 @@ app.on('window-all-closed', () => {
 });
 
 app.whenReady().then(() => {
-  setupIPC();
+  setupIpc();
   createWindow();
 });

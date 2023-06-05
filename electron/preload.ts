@@ -1,14 +1,15 @@
-import { contextBridge, ipcRenderer } from 'electron';
-import { IPCVoidResult } from './ipc/IPCResult';
+import { contextBridge } from 'electron';
+import { IpcVoidResult } from './ipc/IpcResult';
+import invokeIpc from './ipc/invoke';
 
 export const apiName = 'electronAPI';
 
 export type API = {
-  sendMail: () => Promise<IPCVoidResult>;
+  sendMail: () => Promise<IpcVoidResult>;
 };
 
 const api: API = {
-  sendMail: () => ipcRenderer.invoke('send-mail', 'Test subject', 'Test body'),
+  sendMail: () => invokeIpc('send-mail', { subject: 'Test subject', body: 'Test body' }),
 };
 
 contextBridge.exposeInMainWorld(apiName, api);

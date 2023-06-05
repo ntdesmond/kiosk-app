@@ -1,6 +1,6 @@
 import { createTransport } from 'nodemailer';
 import { MailOptions } from 'nodemailer/lib/smtp-pool';
-import { IPCVoidResult } from './IPCResult';
+import { IpcVoidResult } from './IpcResult';
 
 const {
   VITE_SMTP_HOST,
@@ -34,7 +34,7 @@ const transporter = createTransport({
   },
 });
 
-const sendMail = async (subject: string, body: string): Promise<IPCVoidResult> => {
+const sendMail = async (subject: string, body: string): Promise<IpcVoidResult> => {
   if (missingValues.length > 0) {
     return { ok: false, error: `Missing values: ${missingValues.join(', ')}` };
   }
