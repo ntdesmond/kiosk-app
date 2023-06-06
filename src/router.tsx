@@ -1,6 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Menu from './pages/menu/Menu';
+import Contacts from './pages/Contacts';
 
 const router = createBrowserRouter([
   {
@@ -9,6 +10,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Menu />,
+      },
+      {
+        path: 'contact',
+        element: <Contacts />,
       },
       {
         path: '*',
