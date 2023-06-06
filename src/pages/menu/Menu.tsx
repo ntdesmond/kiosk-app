@@ -12,7 +12,7 @@ const Menu = () => {
         <MenuTile caption={t('faq')} icon={MdQuestionAnswer} target="/faq" />
       </GridItem>
       <GridItem colSpan={2}>
-        <MenuTile caption={t('create')} icon={MdCreate} target="/new" />
+        <MenuTile caption={t('newRequest')} icon={MdCreate} target="/request" />
       </GridItem>
       <GridItem>
         <MenuTile caption={t('contact')} icon={MdOutlineContactPage} target="/contact" />

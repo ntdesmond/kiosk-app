@@ -14,7 +14,7 @@ const MenuTile = ({ caption, icon, target }: MenuTileProps) => (
       <CardBody>
         <VStack justify="center" height="100%">
           <Icon as={icon} boxSize={[24, null, null, 36, 48, 72]} />
-          <LinkOverlay as={RouteLink} to={target}>
+          <LinkOverlay as={RouteLink} to={target} draggable={false}>
             <Heading
               size={['md', null, null, 'lg', 'xl']}
               textTransform="uppercase"
