@@ -1,7 +1,11 @@
 import { useInterval, VStack, Heading, Text, Box } from '@chakra-ui/react';
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Clock = () => {
+  const {
+    i18n: { language },
+  } = useTranslation();
   const [date, setDate] = useState<Date>();
 
   const updateDate = useCallback(() => {
@@ -21,10 +25,10 @@ const Clock = () => {
   return (
     <VStack>
       <Heading size={['xl', null, null, '2xl', '4xl']}>
-        {date.toLocaleString('en', { timeStyle: 'short' })}
+        {date.toLocaleString(language, { timeStyle: 'short' })}
       </Heading>
       <Text fontSize={['md', null, null, 'xl']}>
-        {date.toLocaleString('en', { dateStyle: 'full' })}
+        {date.toLocaleString(language, { dateStyle: 'full' })}
       </Text>
     </VStack>
   );
