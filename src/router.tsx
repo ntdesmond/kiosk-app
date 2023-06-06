@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import Menu from './pages/menu/Menu';
 import Contacts from './pages/Contacts';
 import NewRequest from './pages/forms/NewRequest';
+import Feedback from './pages/forms/Feedback';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: 'contact',
         element: <Contacts />,
+      },
+      {
+        path: 'feedback',
+        element: <Feedback />,
       },
       {
         path: '*',

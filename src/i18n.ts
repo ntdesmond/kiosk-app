@@ -11,6 +11,7 @@ i18n.use(initReactI18next).init({
         contact: 'Contact us',
         contactTitle: 'Our contacts',
         feedback: 'Leave feedback',
+        feedbackTitle: 'Leaving a feedback',
 
         room: 'Room',
 
@@ -29,6 +30,8 @@ i18n.use(initReactI18next).init({
         feedbackInput: 'Your feedback',
         feedbackInputPlaceholder: 'Tell us what you think',
         feedbackInputHint: 'Minimum 10 characters',
+
+        send: 'Send',
       },
     },
     ru: {
@@ -39,6 +42,7 @@ i18n.use(initReactI18next).init({
         contact: 'Связаться с нами',
         contactTitle: 'Контакты',
         feedback: 'Оставить отзыв',
+        feedbackTitle: 'Новый отзыв',
 
         room: 'Кабинет',
 
@@ -57,6 +61,8 @@ i18n.use(initReactI18next).init({
         feedbackInput: 'Ваш отзыв',
         feedbackInputPlaceholder: 'Напишите нам, что вы думаете',
         feedbackInputHint: 'Минимум 10 символов',
+
+        send: 'Отправить',
       },
     },
   },
