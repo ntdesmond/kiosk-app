@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { Image, ImageProps, forwardRef } from '@chakra-ui/react';
 import Flag, { FlagProps } from 'react-world-flags';
 
@@ -13,6 +12,7 @@ const FlagImage = forwardRef<ImageProps & FlagProps, 'img'>(({ code, ...props },
     objectFit="cover"
     objectPosition="left"
     code={code === 'en' ? 'us' : code}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
   />
 ));

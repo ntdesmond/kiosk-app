@@ -15,7 +15,11 @@ const MenuTile = ({ caption, icon, target }: MenuTileProps) => (
         <VStack justify="center" height="100%">
           <Icon as={icon} boxSize={[24, null, null, 36, 48, 72]} />
           <LinkOverlay as={RouteLink} to={target}>
-            <Heading size={['md', null, null, 'lg', 'xl']} textTransform="uppercase">
+            <Heading
+              size={['md', null, null, 'lg', 'xl']}
+              textTransform="uppercase"
+              textAlign="center"
+            >
               {caption}
             </Heading>
           </LinkOverlay>
