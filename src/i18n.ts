@@ -7,11 +7,15 @@ i18n.use(initReactI18next).init({
       translation: {
         newRequest: 'Create a request',
         newRequestTitle: 'New request',
+        newRequestSuccessMessage: 'Your request has been successfully sent.',
+        newRequestErrorMessage: 'An error occurred while trying to send your request.',
         faq: 'Frequently asked questions',
         contact: 'Contact us',
         contactTitle: 'Our contacts',
         feedback: 'Leave feedback',
         feedbackTitle: 'Leaving a feedback',
+        feedbackSuccessMessage: 'Feedback sent! Thank you.',
+        feedbackErrorMessage: 'An error occurred while trying to send your feedback.',
 
         room: 'Room',
 
@@ -35,18 +39,27 @@ i18n.use(initReactI18next).init({
         feedbackInputHint: 'Minimum 10 characters',
         feedbackInputError: 'Must be at least 10 characters',
 
+        successModalTitle: 'Success',
+        errorModalTitle: 'Error',
+        errorModalDetails: 'Technical details:',
         send: 'Send',
+        close: 'Close',
+        backToMenu: 'Go to main menu',
       },
     },
     ru: {
       translation: {
         newRequest: 'Создать заявку',
         newRequestTitle: 'Новая заявка',
+        newRequestSuccessMessage: 'Ваша заявка была успешно отправлена.',
+        newRequestErrorMessage: 'Произошла ошибка при попытке отправки заявки.',
         faq: 'Частые вопросы',
         contact: 'Связаться с нами',
         contactTitle: 'Контакты',
         feedback: 'Оставить отзыв',
         feedbackTitle: 'Новый отзыв',
+        feedbackSuccessMessage: 'Ваш отзыв сохранен. Спасибо!',
+        feedbackErrorMessage: 'Произошла ошибка при попытке отправки отзыва.',
 
         room: 'Кабинет',
 
@@ -70,7 +83,12 @@ i18n.use(initReactI18next).init({
         feedbackInputHint: 'Минимум 10 символов',
         feedbackInputError: 'Необходимо ввести хотя бы 10 символов',
 
+        successModalTitle: 'Успешно',
+        errorModalTitle: 'Ошибка',
+        errorModalDetails: 'Технические подробности:',
         send: 'Отправить',
+        close: 'Закрыть',
+        backToMenu: 'В главное меню',
       },
     },
   },

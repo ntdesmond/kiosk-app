@@ -12,12 +12,20 @@ import {
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const MotionBox = motion(Box);
 const autoReturnDelay = 5;
 
-const SuccessModal = ({ isOpen }: { isOpen: boolean }) => {
+const SuccessModal = ({
+  isOpen,
+  i18nPrefix,
+}: {
+  isOpen: boolean;
+  i18nPrefix: 'newRequest' | 'feedback';
+}) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const goToMenu = useCallback(() => navigate('/', { replace: true }), [navigate]);
 
@@ -27,13 +35,13 @@ const SuccessModal = ({ isOpen }: { isOpen: boolean }) => {
     <Modal isOpen={isOpen} onClose={() => {}}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Success</ModalHeader>
+        <ModalHeader>{t('successModalTitle')}</ModalHeader>
         <ModalBody>
-          <Text marginBottom="2">Your request has been successfully sent. Thank you!</Text>
+          <Text marginBottom="2">{t(`${i18nPrefix}SuccessMessage`)}</Text>
         </ModalBody>
         <ModalFooter>
           <Button onClick={goToMenu}>
-            <Text zIndex={2}>Back to menu</Text>
+            <Text zIndex={2}>{t(`backToMenu`)}</Text>
             <MotionBox
               position="absolute"
               borderRadius="md"

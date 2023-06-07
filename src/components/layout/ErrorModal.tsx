@@ -10,37 +10,44 @@ import {
   Text,
   Code,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 const ErrorModal = ({
   isOpen,
   onClose,
   error,
+  i18nPrefix,
 }: {
   isOpen: boolean;
   onClose: () => void;
   error: string;
-}) => (
-  <Modal isOpen={isOpen} onClose={onClose}>
-    <ModalOverlay />
-    <ModalContent>
-      <ModalHeader>Error</ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-        <Text marginBottom="2">An error occurred while trying to submit your request.</Text>
-        {error && (
-          <>
-            <Text>Technical details:</Text>
-            <Code>{error}</Code>
-          </>
-        )}
-      </ModalBody>
-      <ModalFooter>
-        <Button colorScheme="gray" onClick={onClose}>
-          Close
-        </Button>
-      </ModalFooter>
-    </ModalContent>
-  </Modal>
-);
+  i18nPrefix: 'newRequest' | 'feedback';
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{t('errorModalTitle')}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Text marginBottom="2">{t(`${i18nPrefix}ErrorMessage`)}</Text>
+          {error && (
+            <>
+              <Text>{t('errorModalDetails')}</Text>
+              <Code>{error}</Code>
+            </>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="gray" onClick={onClose}>
+            {t('close')}
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
 
 export default ErrorModal;

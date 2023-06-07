@@ -29,8 +29,13 @@ const Feedback = () => {
 
   return (
     <>
-      <SuccessModal isOpen={!isSuccess} />
-      <ErrorModal isOpen={error !== ''} error={error} onClose={() => setError('')} />
+      <SuccessModal isOpen={isSuccess} i18nPrefix="feedback" />
+      <ErrorModal
+        isOpen={error !== ''}
+        error={error}
+        onClose={() => setError('')}
+        i18nPrefix="feedback"
+      />
       <VStack spacing="8">
         <Header title={t('feedbackTitle')} />
         <VStack align="stretch" width="100%" spacing="8">
