@@ -13,7 +13,7 @@ import './index.css';
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={theme} toastOptions={{ defaultOptions: { position: 'top' } }}>
       <RouterProvider router={router} />
     </ChakraProvider>
   </StrictMode>,
