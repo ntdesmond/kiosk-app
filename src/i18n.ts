@@ -45,6 +45,9 @@ i18n.use(initReactI18next).init({
         send: 'Send',
         close: 'Close',
         backToMenu: 'Go to main menu',
+
+        lettersKeyContent: 'ABC',
+        doneKeyContent: 'Done',
       },
     },
     ru: {
@@ -89,6 +92,9 @@ i18n.use(initReactI18next).init({
         send: 'Отправить',
         close: 'Закрыть',
         backToMenu: 'В главное меню',
+
+        lettersKeyContent: 'АБВ',
+        doneKeyContent: 'Готово',
       },
     },
   },

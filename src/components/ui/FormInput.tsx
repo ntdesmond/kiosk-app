@@ -11,9 +11,14 @@ import {
   useBoolean,
   FormErrorMessage,
   TypographyProps,
+  useDisclosure,
+  Collapse,
+  Box,
+  VStack,
 } from '@chakra-ui/react';
 import { ChangeEventHandler, ReactNode, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import Keyboard from './keyboard/Keyboard';
 
 type FormInputProps = {
   i18nPrefix: string;
@@ -34,6 +39,7 @@ const FormInput = ({
   onChange: changeCallback,
 }: FormInputProps) => {
   const { t } = useTranslation();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const [isInvalid, { on: onInvalid, off: onValid }] = useBoolean(false);
 
   const onChange = useCallback<ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>>(
@@ -57,38 +63,44 @@ const FormInput = ({
   const TargetElement = useMemo(() => (isMultiline ? Textarea : Input), [isMultiline]);
 
   return (
-    <FormControl isInvalid={isInvalid} isRequired>
-      <FormLabel fontSize={['md', null, null, '2xl', '4xl']}>{label}</FormLabel>
-      <InputGroup>
-        {leftElement && (
-          <InputLeftElement
-            height="100%"
-            justifyContent="end"
-            alignItems="center"
-            width={['8', null, null, null, '10']}
+    <VStack spacing={0} overflow="visible">
+      <Box as={Collapse} width="100%" in={isOpen}>
+        <Keyboard onDone={onClose} />
+      </Box>
+      <FormControl isInvalid={isInvalid} isRequired>
+        <FormLabel fontSize={['md', null, null, '2xl', '4xl']}>{label}</FormLabel>
+        <InputGroup>
+          {leftElement && (
+            <InputLeftElement
+              height="100%"
+              justifyContent="end"
+              alignItems="center"
+              width={['8', null, null, null, '10']}
+              fontSize={inputFontSize}
+              pointerEvents="none"
+              color="gray"
+            >
+              {leftElement}
+            </InputLeftElement>
+          )}
+          <TargetElement
+            paddingLeft={leftElement ? ['8', '8', null, null, '10'] : undefined}
+            borderWidth="0.1em"
             fontSize={inputFontSize}
-            pointerEvents="none"
-            color="gray"
-          >
-            {leftElement}
-          </InputLeftElement>
+            size={['md', null, null, 'lg']}
+            placeholder={placeholder}
+            resize="none"
+            onFocus={onOpen}
+            {...{ onChange, pattern, minLength, maxLength }}
+          />
+        </InputGroup>
+        {isInvalid ? (
+          <FormErrorMessage fontSize={inputFontSize}>{errorText}</FormErrorMessage>
+        ) : (
+          <FormHelperText fontSize={inputFontSize}>{hint}</FormHelperText>
         )}
-        <TargetElement
-          paddingLeft={leftElement ? ['8', '8', null, null, '10'] : undefined}
-          borderWidth="0.1em"
-          fontSize={inputFontSize}
-          size={['md', null, null, 'lg']}
-          placeholder={placeholder}
-          resize="none"
-          {...{ onChange, pattern, minLength, maxLength }}
-        />
-      </InputGroup>
-      {isInvalid ? (
-        <FormErrorMessage fontSize={inputFontSize}>{errorText}</FormErrorMessage>
-      ) : (
-        <FormHelperText fontSize={inputFontSize}>{hint}</FormHelperText>
-      )}
-    </FormControl>
+      </FormControl>
+    </VStack>
   );
 };
 
