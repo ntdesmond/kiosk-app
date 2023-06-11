@@ -7,9 +7,10 @@ export interface ReviewSectionProps {
   i18nPrefix: string;
   text: string;
   onEdit: () => void;
+  prependText?: string;
 }
 
-const ReviewSection = ({ text, i18nPrefix, onEdit }: ReviewSectionProps) => {
+const ReviewSection = ({ text, i18nPrefix, onEdit, prependText }: ReviewSectionProps) => {
   const { t } = useTranslation();
   const label = useMemo(() => t(`${i18nPrefix}Input`), [i18nPrefix, t]);
 
@@ -21,7 +22,14 @@ const ReviewSection = ({ text, i18nPrefix, onEdit }: ReviewSectionProps) => {
           {t('reviewEdit')}
         </Button>
       </HStack>
-      {text ? <Text>{text}</Text> : <Text color="red">{t('reviewFieldEmpty')}</Text>}
+      {text ? (
+        <Text>
+          {prependText}
+          {text}
+        </Text>
+      ) : (
+        <Text color="red">{t('reviewFieldEmpty')}</Text>
+      )}
     </VStack>
   );
 };

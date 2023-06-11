@@ -1,11 +1,25 @@
-import { useCallback, useState } from 'react';
-import { Button, VStack, useBoolean } from '@chakra-ui/react';
-import { MdSend } from 'react-icons/md';
+import { useCallback, useMemo, useState } from 'react';
+import {
+  Box,
+  Step,
+  StepIcon,
+  StepIndicator,
+  StepNumber,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  Stepper,
+  VStack,
+  useBoolean,
+  useSteps,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Header from '../components/layout/Header';
 import ErrorModal from '../components/layout/ErrorModal';
 import SuccessModal from '../components/layout/SuccessModal';
 import { TelegramInput, FeedbackInput } from '../components/forms/FormInput';
+import Review from '../components/forms/review/Review';
+import { ReviewSectionProps } from '../components/forms/review/ReviewSection';
 
 const Feedback = () => {
   const { t } = useTranslation();
@@ -27,6 +41,44 @@ const Feedback = () => {
     });
   }, [showLoading, telegram, feedback, hideLoading, onSuccess]);
 
+  const { activeStep, setActiveStep } = useSteps({
+    index: 2,
+    count: 3,
+  });
+
+  const reviewEntries = useMemo<ReviewSectionProps[]>(
+    () => [
+      { i18nPrefix: 'telegram', text: telegram, prependText: '@', onEdit: () => setActiveStep(0) },
+      { i18nPrefix: 'feedback', text: feedback, onEdit: () => setActiveStep(1) },
+    ],
+    [feedback, setActiveStep, telegram],
+  );
+
+  const steps = useMemo(
+    () => [
+      {
+        title: 'Telegram',
+        element: <TelegramInput defaultValue={telegram} onChange={setTelegram} />,
+      },
+      {
+        title: 'Feedback',
+        element: <FeedbackInput defaultValue={feedback} onChange={setFeedback} />,
+      },
+      {
+        title: 'Review and send',
+        element: (
+          <Review
+            entries={reviewEntries}
+            onSend={onSend}
+            isSending={isLoading}
+            isSendDisabled={!telegram || !feedback}
+          />
+        ),
+      },
+    ],
+    [feedback, isLoading, onSend, reviewEntries, telegram],
+  );
+
   return (
     <>
       <SuccessModal isOpen={isSuccess} i18nPrefix="feedback" />
@@ -38,19 +90,26 @@ const Feedback = () => {
       />
       <VStack spacing="8">
         <Header title={t('feedbackTitle')} />
-        <VStack align="stretch" width="100%" spacing="8">
-          <TelegramInput onChange={setTelegram} defaultValue={telegram} />
-          <FeedbackInput onChange={setFeedback} defaultValue={feedback} />
-          <Button
-            leftIcon={<MdSend />}
-            alignSelf="start"
-            isLoading={isLoading}
-            isDisabled={!telegram || !feedback}
-            onClick={onSend}
-          >
-            {t('send')}
-          </Button>
-        </VStack>
+        <Box alignSelf="stretch">
+          <Stepper index={activeStep} marginBottom="10">
+            {steps.map((step, index) => (
+              <Step key={step.title} onClick={() => setActiveStep(index)}>
+                <StepIndicator>
+                  <StepStatus
+                    complete={<StepIcon />}
+                    incomplete={<StepNumber />}
+                    active={<StepNumber />}
+                  />
+                </StepIndicator>
+                <Box flexShrink="0">
+                  <StepTitle>{step.title}</StepTitle>
+                </Box>
+                <StepSeparator />
+              </Step>
+            ))}
+          </Stepper>
+          {steps[activeStep].element}
+        </Box>
       </VStack>
     </>
   );

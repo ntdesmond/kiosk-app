@@ -54,7 +54,7 @@ const NewRequest = () => {
 
   const reviewEntries = useMemo<ReviewSectionProps[]>(
     () => [
-      { i18nPrefix: 'telegram', text: telegram, onEdit: () => setActiveStep(0) },
+      { i18nPrefix: 'telegram', text: telegram, prependText: '@', onEdit: () => setActiveStep(0) },
       { i18nPrefix: 'subject', text: subject, onEdit: () => setActiveStep(1) },
       { i18nPrefix: 'request', text: body, onEdit: () => setActiveStep(2) },
     ],
@@ -109,11 +109,9 @@ const NewRequest = () => {
                     active={<StepNumber />}
                   />
                 </StepIndicator>
-
                 <Box flexShrink="0">
                   <StepTitle>{step.title}</StepTitle>
                 </Box>
-
                 <StepSeparator />
               </Step>
             ))}
