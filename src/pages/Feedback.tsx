@@ -42,7 +42,6 @@ const Feedback = () => {
   }, [showLoading, telegram, feedback, hideLoading, onSuccess]);
 
   const { activeStep, setActiveStep } = useSteps({
-    index: 2,
     count: 3,
   });
 
@@ -57,15 +56,15 @@ const Feedback = () => {
   const steps = useMemo(
     () => [
       {
-        title: 'Telegram',
+        title: t('stepTelegram'),
         element: <TelegramInput defaultValue={telegram} onChange={setTelegram} />,
       },
       {
-        title: 'Feedback',
+        title: t('stepFeedback'),
         element: <FeedbackInput defaultValue={feedback} onChange={setFeedback} />,
       },
       {
-        title: 'Review and send',
+        title: t('stepReview'),
         element: (
           <Review
             entries={reviewEntries}
@@ -76,7 +75,7 @@ const Feedback = () => {
         ),
       },
     ],
-    [feedback, isLoading, onSend, reviewEntries, telegram],
+    [feedback, isLoading, onSend, reviewEntries, t, telegram],
   );
 
   return (

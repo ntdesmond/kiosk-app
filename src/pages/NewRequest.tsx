@@ -48,7 +48,6 @@ const NewRequest = () => {
   }, [showLoading, telegram, subject, body, hideLoading, onSuccess]);
 
   const { activeStep, setActiveStep } = useSteps({
-    index: 2,
     count: 4,
   });
 
@@ -64,16 +63,19 @@ const NewRequest = () => {
   const steps = useMemo(
     () => [
       {
-        title: 'Telegram',
+        title: t('stepTelegram'),
         element: <TelegramInput defaultValue={telegram} onChange={setTelegram} />,
       },
       {
-        title: 'Subject',
+        title: t('stepRequestSubject'),
         element: <RequestSubjectInput defaultValue={subject} onChange={setSubject} />,
       },
-      { title: 'Details', element: <RequestBodyInput defaultValue={body} onChange={setBody} /> },
       {
-        title: 'Review and send',
+        title: t('stepRequestBody'),
+        element: <RequestBodyInput defaultValue={body} onChange={setBody} />,
+      },
+      {
+        title: t('stepReview'),
         element: (
           <Review
             entries={reviewEntries}
@@ -84,7 +86,7 @@ const NewRequest = () => {
         ),
       },
     ],
-    [body, isLoading, onSend, reviewEntries, subject, telegram],
+    [body, isLoading, onSend, reviewEntries, subject, t, telegram],
   );
 
   return (

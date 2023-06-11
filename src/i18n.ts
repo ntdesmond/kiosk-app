@@ -42,12 +42,21 @@ i18n.use(initReactI18next).init({
         successModalTitle: 'Success',
         errorModalTitle: 'Error',
         errorModalDetails: 'Technical details:',
-        send: 'Send',
         close: 'Close',
         backToMenu: 'Go to main menu',
 
         lettersKeyContent: 'ABC',
         doneKeyContent: 'Done',
+
+        stepTelegram: 'Telegram',
+        stepRequestSubject: 'Subject',
+        stepRequestBody: 'Details',
+        stepReview: 'Review and send',
+        stepFeedback: 'Feedback',
+
+        reviewEdit: 'Edit',
+        reviewFieldEmpty: 'empty',
+        reviewSend: 'Send',
       },
     },
     ru: {
@@ -89,12 +98,21 @@ i18n.use(initReactI18next).init({
         successModalTitle: 'Успешно',
         errorModalTitle: 'Ошибка',
         errorModalDetails: 'Технические подробности:',
-        send: 'Отправить',
         close: 'Закрыть',
         backToMenu: 'В главное меню',
 
         lettersKeyContent: 'АБВ',
         doneKeyContent: 'Готово',
+
+        stepTelegram: 'Telegram',
+        stepRequestSubject: 'Тема',
+        stepRequestBody: 'Подробности',
+        stepReview: 'Отправка',
+        stepFeedback: 'Отзыв',
+
+        reviewEdit: 'Изменить',
+        reviewFieldEmpty: 'не заполнено',
+        reviewSend: 'Отправить',
       },
     },
   },
