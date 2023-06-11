@@ -10,10 +10,11 @@ const Header = ({ title }: { title: string }) => {
   return (
     <HStack width="100%">
       <IconButton
+        size="lg"
         aspectRatio="1"
         height="fit-content"
         onClick={goBack}
-        icon={<Icon as={MdArrowBack} boxSize={[8, null, null, 16, 20, 24]} />}
+        icon={<Icon as={MdArrowBack} boxSize={8} />}
         aria-label="Go Back"
       />
       <Heading flex="1" textAlign="center" size={['md', null, null, 'lg', 'xl']}>

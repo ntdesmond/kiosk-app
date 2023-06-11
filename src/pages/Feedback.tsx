@@ -2,10 +2,10 @@ import { useCallback, useState } from 'react';
 import { Button, VStack, useBoolean } from '@chakra-ui/react';
 import { MdSend } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
-import { FeedbackInput, TelegramInput } from '../components/ui/FormInput';
 import Header from '../components/layout/Header';
 import ErrorModal from '../components/layout/ErrorModal';
 import SuccessModal from '../components/layout/SuccessModal';
+import { TelegramInput, FeedbackInput } from '../components/forms/FormInput';
 
 const Feedback = () => {
   const { t } = useTranslation();
@@ -39,8 +39,8 @@ const Feedback = () => {
       <VStack spacing="8">
         <Header title={t('feedbackTitle')} />
         <VStack align="stretch" width="100%" spacing="8">
-          <TelegramInput onChange={setTelegram} />
-          <FeedbackInput onChange={setFeedback} />
+          <TelegramInput onChange={setTelegram} defaultValue={telegram} />
+          <FeedbackInput onChange={setFeedback} defaultValue={feedback} />
           <Button
             leftIcon={<MdSend />}
             alignSelf="start"

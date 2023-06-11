@@ -112,7 +112,7 @@ const theme = extendTheme(
     colors,
     fonts,
   },
-  withDefaultColorScheme({ colorScheme: 'green', components: ['Button'] }),
+  withDefaultColorScheme({ colorScheme: 'green', components: ['Button', 'Stepper'] }),
 );
 
 export default theme;
