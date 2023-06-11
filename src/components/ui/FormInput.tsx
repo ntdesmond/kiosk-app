@@ -63,11 +63,11 @@ const FormInput = ({
   const TargetElement = useMemo(() => (isMultiline ? Textarea : Input), [isMultiline]);
 
   return (
-    <VStack spacing={0} overflow="visible">
+    <VStack spacing={0} overflow="visible" marginX="-10">
       <Box as={Collapse} width="100%" in={isOpen}>
         <Keyboard onDone={onClose} />
       </Box>
-      <FormControl isInvalid={isInvalid} isRequired>
+      <FormControl isInvalid={isInvalid} isRequired paddingX="16">
         <FormLabel fontSize={['md', null, null, '2xl', '4xl']}>{label}</FormLabel>
         <InputGroup>
           {leftElement && (

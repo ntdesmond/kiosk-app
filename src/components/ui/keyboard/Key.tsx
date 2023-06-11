@@ -7,6 +7,8 @@ const Key = forwardRef<KeyProps, 'div'>(
     // eslint-disable-next-line react/jsx-props-no-spreading
     <GridItem minHeight={16} {...props} ref={ref}>
       <Button
+        // remove hover effect
+        _hover={{ bg: '' }}
         width="100%"
         height="100%"
         padding="0"
