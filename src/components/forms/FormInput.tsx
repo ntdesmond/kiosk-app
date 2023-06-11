@@ -32,7 +32,7 @@ interface TypedInputProps {
   defaultValue: string;
 }
 
-const inputFontSize: TypographyProps['fontSize'] = ['sm', null, null, 'xl', '2xl'];
+const inputFontSize: TypographyProps['fontSize'] = ['sm', null, null, '2xl', '3xl'];
 
 const FormInput = ({
   i18nPrefix,
@@ -71,7 +71,7 @@ const FormInput = ({
   return (
     <VStack spacing={0} overflow="visible" marginX="-10">
       <FormControl isInvalid={isInvalid} isRequired paddingX="16">
-        <FormLabel fontSize={['md', null, null, '2xl', '4xl']}>{label}</FormLabel>
+        <FormLabel fontSize={['md', null, null, '3xl', '5xl']}>{label}</FormLabel>
         <InputGroup>
           {leftElement && (
             <InputLeftElement
