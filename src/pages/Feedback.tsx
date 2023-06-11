@@ -41,7 +41,7 @@ const Feedback = () => {
     });
   }, [showLoading, telegram, feedback, hideLoading, onSuccess]);
 
-  const { activeStep, setActiveStep } = useSteps({
+  const { activeStep, setActiveStep, goToNext } = useSteps({
     count: 3,
   });
 
@@ -57,11 +57,11 @@ const Feedback = () => {
     () => [
       {
         title: t('stepTelegram'),
-        element: <TelegramInput defaultValue={telegram} onChange={setTelegram} />,
+        element: <TelegramInput onDone={goToNext} defaultValue={telegram} onChange={setTelegram} />,
       },
       {
         title: t('stepFeedback'),
-        element: <FeedbackInput defaultValue={feedback} onChange={setFeedback} />,
+        element: <FeedbackInput onDone={goToNext} defaultValue={feedback} onChange={setFeedback} />,
       },
       {
         title: t('stepReview'),
@@ -75,7 +75,7 @@ const Feedback = () => {
         ),
       },
     ],
-    [feedback, isLoading, onSend, reviewEntries, t, telegram],
+    [feedback, goToNext, isLoading, onSend, reviewEntries, t, telegram],
   );
 
   return (

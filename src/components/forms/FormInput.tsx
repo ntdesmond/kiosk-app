@@ -11,9 +11,6 @@ import {
   useBoolean,
   FormErrorMessage,
   TypographyProps,
-  useDisclosure,
-  Collapse,
-  Box,
   VStack,
 } from '@chakra-ui/react';
 import { ChangeEventHandler, ReactNode, useCallback, useMemo } from 'react';
@@ -25,9 +22,11 @@ type FormInputProps = {
   isMultiline?: boolean;
   leftElement?: ReactNode;
   onChange: (value: string) => void;
+  onDone: () => void;
 } & Pick<TextareaProps & InputProps, 'minLength' | 'maxLength' | 'pattern' | 'defaultValue'>;
 
 interface TypedInputProps {
+  onDone: () => void;
   onChange: (value: string) => void;
   defaultValue: string;
 }
@@ -43,9 +42,9 @@ const FormInput = ({
   maxLength,
   onChange: changeCallback,
   defaultValue,
+  onDone,
 }: FormInputProps) => {
   const { t } = useTranslation();
-  const { isOpen, onClose, onOpen } = useDisclosure();
   const [isInvalid, { on: onInvalid, off: onValid }] = useBoolean(false);
 
   const onChange = useCallback<ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>>(
@@ -69,7 +68,7 @@ const FormInput = ({
   const TargetElement = useMemo(() => (isMultiline ? Textarea : Input), [isMultiline]);
 
   return (
-    <VStack spacing={0} overflow="visible" marginX="-10">
+    <VStack spacing="10" align="stretch" overflow="visible" marginX="-10">
       <FormControl isInvalid={isInvalid} isRequired paddingX="16">
         <FormLabel fontSize={['md', null, null, '3xl', '5xl']}>{label}</FormLabel>
         <InputGroup>
@@ -94,9 +93,8 @@ const FormInput = ({
             placeholder={placeholder}
             resize="none"
             minHeight={isMultiline ? '3xs' : '0'}
-            onFocus={onOpen}
             autoFocus
-            {...{ onChange, pattern, minLength, maxLength, defaultValue }}
+            {...{ onChange, pattern, minLength, maxLength, defaultValue, onDone }}
           />
         </InputGroup>
         {isInvalid ? (
@@ -105,34 +103,47 @@ const FormInput = ({
           <FormHelperText fontSize={inputFontSize}>{hint}</FormHelperText>
         )}
       </FormControl>
-      <Box as={Collapse} width="100%" in={isOpen} paddingTop="10">
-        <Keyboard onDone={onClose} />
-      </Box>
+      <Keyboard onDone={onDone} />
     </VStack>
   );
 };
 
 export default FormInput;
 
-export const FeedbackInput = ({ onChange, defaultValue }: TypedInputProps) => (
-  <FormInput i18nPrefix="feedback" isMultiline minLength={10} {...{ onChange, defaultValue }} />
+export const FeedbackInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
+  <FormInput
+    i18nPrefix="feedback"
+    isMultiline
+    minLength={10}
+    {...{ onChange, defaultValue, onDone }}
+  />
 );
 
-export const RequestBodyInput = ({ onChange, defaultValue }: TypedInputProps) => (
-  <FormInput i18nPrefix="request" isMultiline minLength={10} {...{ onChange, defaultValue }} />
+export const RequestBodyInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
+  <FormInput
+    i18nPrefix="request"
+    isMultiline
+    minLength={10}
+    {...{ onChange, defaultValue, onDone }}
+  />
 );
 
-export const RequestSubjectInput = ({ onChange, defaultValue }: TypedInputProps) => (
-  <FormInput i18nPrefix="subject" minLength={3} maxLength={40} {...{ onChange, defaultValue }} />
+export const RequestSubjectInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
+  <FormInput
+    i18nPrefix="subject"
+    minLength={3}
+    maxLength={40}
+    {...{ onChange, defaultValue, onDone }}
+  />
 );
 
-export const TelegramInput = ({ onChange, defaultValue }: TypedInputProps) => (
+export const TelegramInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
   <FormInput
     i18nPrefix="telegram"
     leftElement="@"
     minLength={4}
     maxLength={32}
     pattern="[A-Za-z0-9_]{4,32}"
-    {...{ onChange, defaultValue }}
+    {...{ onChange, defaultValue, onDone }}
   />
 );

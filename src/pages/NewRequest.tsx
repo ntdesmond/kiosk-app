@@ -47,7 +47,7 @@ const NewRequest = () => {
     });
   }, [showLoading, telegram, subject, body, hideLoading, onSuccess]);
 
-  const { activeStep, setActiveStep } = useSteps({
+  const { activeStep, setActiveStep, goToNext } = useSteps({
     count: 4,
   });
 
@@ -64,15 +64,17 @@ const NewRequest = () => {
     () => [
       {
         title: t('stepTelegram'),
-        element: <TelegramInput defaultValue={telegram} onChange={setTelegram} />,
+        element: <TelegramInput onDone={goToNext} defaultValue={telegram} onChange={setTelegram} />,
       },
       {
         title: t('stepRequestSubject'),
-        element: <RequestSubjectInput defaultValue={subject} onChange={setSubject} />,
+        element: (
+          <RequestSubjectInput onDone={goToNext} defaultValue={subject} onChange={setSubject} />
+        ),
       },
       {
         title: t('stepRequestBody'),
-        element: <RequestBodyInput defaultValue={body} onChange={setBody} />,
+        element: <RequestBodyInput onDone={goToNext} defaultValue={body} onChange={setBody} />,
       },
       {
         title: t('stepReview'),
@@ -86,7 +88,7 @@ const NewRequest = () => {
         ),
       },
     ],
-    [body, isLoading, onSend, reviewEntries, subject, t, telegram],
+    [body, goToNext, isLoading, onSend, reviewEntries, subject, t, telegram],
   );
 
   return (
