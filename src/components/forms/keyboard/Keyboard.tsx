@@ -1,5 +1,5 @@
 import { Grid, GridItem, useBoolean } from '@chakra-ui/react';
-import { memo, useMemo, useState } from 'react';
+import { MouseEventHandler, RefObject, memo, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   MdBackspace,
@@ -21,7 +21,13 @@ const layouts: Record<Language | 'symbols', string> = {
   symbols: '@`#№&_—!^$₽%-|/\\?()<>+:;,[]{}*\'"=',
 };
 
-const Keyboard = memo(({ onDone }: { onDone: () => void }) => {
+interface KeyboardProps {
+  onInputChange: (value: string) => void;
+  onDone: () => void;
+  inputRef: RefObject<HTMLInputElement>;
+}
+
+const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
   const { t, i18n } = useTranslation();
   const [isShowingSymbols, { toggle: toggleSymbols }] = useBoolean();
   const [uppercase, setUppercase] = useState<UppercaseStatus>('off');
@@ -48,8 +54,32 @@ const Keyboard = memo(({ onDone }: { onDone: () => void }) => {
     return layouts[language];
   }, [isShowingSymbols, language, uppercase]);
 
+  const appendChar = useCallback(
+    (char: string) => {
+      if (!inputRef.current) {
+        return;
+      }
+      const newValue = inputRef.current.value + char;
+
+      // eslint-disable-next-line no-param-reassign
+      inputRef.current.value = newValue;
+
+      onInputChange(newValue);
+    },
+    [inputRef, onInputChange],
+  );
+
+  const keepInputFocused = useCallback<MouseEventHandler>(
+    (event) => {
+      event.stopPropagation();
+      inputRef.current?.focus();
+    },
+    [inputRef],
+  );
+
   return (
     <Grid
+      onClick={keepInputFocused}
       gap={2}
       templateColumns="repeat(13, 1fr)"
       templateRows="repeat(5, 1fr)"
@@ -102,7 +132,9 @@ const Keyboard = memo(({ onDone }: { onDone: () => void }) => {
         </GridItem>
       )}
       {[...layout].map((letter) => (
-        <Key key="letter">{letter}</Key>
+        <Key key={letter} onClick={() => appendChar(letter)}>
+          {letter}
+        </Key>
       ))}
     </Grid>
   );

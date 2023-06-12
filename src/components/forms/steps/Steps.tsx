@@ -12,15 +12,10 @@ import {
 } from '@chakra-ui/react';
 import { ReactElement, useCallback, useMemo } from 'react';
 import { StepProps } from './Step';
-
-interface StepsRenderProps {
-  goToNext: () => void;
-  goTo: (step: number) => void;
-  isShown: boolean;
-}
+import StepsContext from './StepsContext';
 
 interface StepsProps {
-  children: ((props: StepsRenderProps) => ReactElement<StepProps>)[];
+  children: ReactElement<StepProps>[];
 }
 
 const Steps = ({ children }: StepsProps) => {
@@ -31,18 +26,15 @@ const Steps = ({ children }: StepsProps) => {
   // Avoid unnecessary re-renders on input
   const goToNext = useCallback(() => setActiveStep((step) => step + 1), [setActiveStep]);
 
-  const steps = useMemo(
-    () =>
-      children.map((child, index) =>
-        child({ goToNext, goTo: setActiveStep, isShown: index === activeStep }),
-      ),
-    [children, goToNext, setActiveStep, activeStep],
+  const contextValue = useMemo(
+    () => ({ activeStepTitle: children[activeStep].props.title, setActiveStep, goToNext }),
+    [activeStep, children, goToNext, setActiveStep],
   );
 
   return (
-    <>
+    <StepsContext.Provider value={contextValue}>
       <Stepper index={activeStep} marginBottom="10">
-        {steps.map((step, index) => (
+        {children.map((step, index) => (
           <Step key={step.props.title} onClick={() => setActiveStep(index)}>
             <StepIndicator>
               <StepStatus
@@ -58,8 +50,8 @@ const Steps = ({ children }: StepsProps) => {
           </Step>
         ))}
       </Stepper>
-      {steps}
-    </>
+      {children}
+    </StepsContext.Provider>
   );
 };
 

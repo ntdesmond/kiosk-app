@@ -5,15 +5,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Header from '../components/layout/Header';
 import ErrorModal from '../components/layout/ErrorModal';
 import SuccessModal from '../components/layout/SuccessModal';
-import {
-  RequestBodyInput,
-  RequestSubjectInput,
-  TelegramInput,
-} from '../components/forms/FormInput';
 import Review from '../components/forms/review/Review';
 import ReviewSection from '../components/forms/review/ReviewSection';
 import Steps from '../components/forms/steps/Steps';
 import Step from '../components/forms/steps/Step';
+import {
+  TelegramInput,
+  RequestSubjectInput,
+  RequestBodyInput,
+} from '../components/forms/TypedFormInput';
 
 interface RequestForm {
   telegram: string;
@@ -27,7 +27,16 @@ const NewRequest = () => {
   const [isSuccess, { on: onSuccess }] = useBoolean();
   const [isLoading, { on: showLoading, off: hideLoading }] = useBoolean();
 
-  const { register, handleSubmit, watch, formState } = useForm<RequestForm>({ mode: 'onChange' });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    formState: { isValid: isFormValid, errors },
+  } = useForm<RequestForm>({
+    mode: 'onChange',
+  });
 
   const onSend = useCallback<SubmitHandler<RequestForm>>(
     ({ telegram, subject, body }) => {
@@ -59,42 +68,39 @@ const NewRequest = () => {
         <Header title={t('newRequestTitle')} />
         <Box alignSelf="stretch">
           <Steps>
-            {({ goToNext, isShown }) => (
-              <Step isShown={isShown} title={t('stepTelegram')}>
+            <Step title={t('stepTelegram')}>
+              {({ goToNext }) => (
                 <TelegramInput
-                  errors={formState.errors}
                   onDone={goToNext}
-                  register={register}
                   name="telegram"
+                  {...{ register, trigger, setValue, errors }}
                 />
-              </Step>
-            )}
-            {({ goToNext, isShown }) => (
-              <Step isShown={isShown} title={t('stepRequestSubject')}>
+              )}
+            </Step>
+            <Step title={t('stepRequestSubject')}>
+              {({ goToNext }) => (
                 <RequestSubjectInput
-                  errors={formState.errors}
                   onDone={goToNext}
-                  register={register}
                   name="subject"
+                  {...{ register, trigger, setValue, errors }}
                 />
-              </Step>
-            )}
-            {({ goToNext, isShown }) => (
-              <Step isShown={isShown} title={t('stepRequestBody')}>
+              )}
+            </Step>
+            <Step title={t('stepRequestBody')}>
+              {({ goToNext }) => (
                 <RequestBodyInput
-                  errors={formState.errors}
                   onDone={goToNext}
-                  register={register}
                   name="body"
+                  {...{ register, trigger, setValue, errors }}
                 />
-              </Step>
-            )}
-            {({ goTo, isShown }) => (
-              <Step isShown={isShown} title={t('stepReview')}>
+              )}
+            </Step>
+            <Step title={t('stepReview')}>
+              {({ goTo }) => (
                 <Review
                   onSend={handleSubmit(onSend)}
                   isSending={isLoading}
-                  isSendDisabled={!formState.isValid}
+                  isSendDisabled={!isFormValid}
                 >
                   <ReviewSection
                     i18nPrefix="telegram"
@@ -109,8 +115,8 @@ const NewRequest = () => {
                   />
                   <ReviewSection i18nPrefix="request" onEdit={() => goTo(2)} text={formData.body} />
                 </Review>
-              </Step>
-            )}
+              )}
+            </Step>
           </Steps>
         </Box>
       </VStack>

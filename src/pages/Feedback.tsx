@@ -5,11 +5,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Header from '../components/layout/Header';
 import ErrorModal from '../components/layout/ErrorModal';
 import SuccessModal from '../components/layout/SuccessModal';
-import { TelegramInput, FeedbackInput } from '../components/forms/FormInput';
 import Review from '../components/forms/review/Review';
 import ReviewSection from '../components/forms/review/ReviewSection';
 import Steps from '../components/forms/steps/Steps';
 import Step from '../components/forms/steps/Step';
+import { TelegramInput, FeedbackInput } from '../components/forms/TypedFormInput';
 
 interface FeedbackForm {
   telegram: string;
@@ -22,7 +22,14 @@ const Feedback = () => {
   const [isSuccess, { on: onSuccess }] = useBoolean();
   const [isLoading, { on: showLoading, off: hideLoading }] = useBoolean();
 
-  const { register, handleSubmit, watch, formState } = useForm<FeedbackForm>({ mode: 'onChange' });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    formState: { isValid: isFormValid, errors },
+  } = useForm<FeedbackForm>({ mode: 'onChange' });
 
   const onSend = useCallback<SubmitHandler<FeedbackForm>>(
     ({ telegram, feedback }) => {
@@ -54,32 +61,30 @@ const Feedback = () => {
         <Header title={t('feedbackTitle')} />
         <Box alignSelf="stretch">
           <Steps>
-            {({ goToNext, isShown }) => (
-              <Step isShown={isShown} title={t('stepTelegram')}>
+            <Step title={t('stepTelegram')}>
+              {({ goToNext }) => (
                 <TelegramInput
-                  errors={formState.errors}
                   onDone={goToNext}
-                  register={register}
                   name="telegram"
+                  {...{ register, trigger, setValue, errors }}
                 />
-              </Step>
-            )}
-            {({ goToNext, isShown }) => (
-              <Step isShown={isShown} title={t('stepFeedback')}>
+              )}
+            </Step>
+            <Step title={t('stepRequestBody')}>
+              {({ goToNext }) => (
                 <FeedbackInput
-                  errors={formState.errors}
                   onDone={goToNext}
-                  register={register}
                   name="feedback"
+                  {...{ register, trigger, setValue, errors }}
                 />
-              </Step>
-            )}
-            {({ goTo, isShown }) => (
-              <Step isShown={isShown} title={t('stepReview')}>
+              )}
+            </Step>
+            <Step title={t('stepReview')}>
+              {({ goTo }) => (
                 <Review
                   onSend={handleSubmit(onSend)}
                   isSending={isLoading}
-                  isSendDisabled={!formState.isValid}
+                  isSendDisabled={!isFormValid}
                 >
                   <ReviewSection
                     i18nPrefix="telegram"
@@ -93,8 +98,8 @@ const Feedback = () => {
                     text={formData.feedback}
                   />
                 </Review>
-              </Step>
-            )}
+              )}
+            </Step>
           </Steps>
         </Box>
       </VStack>
