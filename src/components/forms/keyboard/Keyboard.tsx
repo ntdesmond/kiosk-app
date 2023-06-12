@@ -59,10 +59,15 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
       if (!inputRef.current) {
         return;
       }
-      const newValue = inputRef.current.value + char;
+      const { selectionStart, selectionEnd, value } = inputRef.current;
+      const start = selectionStart ? value.slice(0, selectionStart) : '';
+      const end = selectionEnd ? value.slice(selectionEnd) : '';
+      const newValue = `${start}${char}${end}`;
+      const newCursorOffset = (selectionStart ?? -1) + 1;
 
       // eslint-disable-next-line no-param-reassign
       inputRef.current.value = newValue;
+      inputRef.current.setSelectionRange(newCursorOffset, newCursorOffset);
 
       onInputChange(newValue);
     },
