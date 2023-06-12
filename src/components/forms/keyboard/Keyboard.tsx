@@ -85,7 +85,6 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
   return (
     <Grid
       onClick={keepInputFocused}
-      gap={2}
       templateColumns="repeat(13, 1fr)"
       templateRows="repeat(5, 1fr)"
       gridAutoFlow="row dense"

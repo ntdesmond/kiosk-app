@@ -9,10 +9,15 @@ const Key = forwardRef<KeyProps, 'div'>(
       <Button
         // remove hover effect
         _hover={{ bg: '' }}
+        // clickable overlay over corners
+        _before={{ content: `""`, position: 'absolute', inset: 0 }}
         width="100%"
         height="100%"
-        padding="0"
         fontSize="4xl"
+        outline="0.15em solid"
+        outlineColor="white"
+        outlineOffset="-0.1em"
+        borderRadius="xl"
         {...{ onClick, colorScheme, bgColor }}
       >
         {children}
