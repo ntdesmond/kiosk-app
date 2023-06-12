@@ -54,16 +54,41 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
     return layouts[language];
   }, [isShowingSymbols, language, uppercase]);
 
+  const erase = useCallback(() => {
+    if (!inputRef.current) {
+      return;
+    }
+    const { selectionStart, selectionEnd, value } = inputRef.current;
+    if (selectionStart === null || selectionEnd === null) {
+      return;
+    }
+
+    const newCursorOffset =
+      selectionStart > 0 && selectionStart === selectionEnd ? selectionStart - 1 : selectionStart;
+    const start = value.slice(0, newCursorOffset);
+    const end = value.slice(selectionEnd);
+    const newValue = `${start}${end}`;
+
+    // eslint-disable-next-line no-param-reassign
+    inputRef.current.value = newValue;
+    inputRef.current.setSelectionRange(newCursorOffset, newCursorOffset);
+
+    onInputChange(newValue);
+  }, [inputRef, onInputChange]);
+
   const appendChar = useCallback(
     (char: string) => {
       if (!inputRef.current) {
         return;
       }
       const { selectionStart, selectionEnd, value } = inputRef.current;
-      const start = selectionStart ? value.slice(0, selectionStart) : '';
-      const end = selectionEnd ? value.slice(selectionEnd) : '';
+      if (selectionStart === null || selectionEnd === null) {
+        return;
+      }
+      const start = value.slice(0, selectionStart);
+      const end = value.slice(selectionEnd);
       const newValue = `${start}${char}${end}`;
-      const newCursorOffset = (selectionStart ?? -1) + 1;
+      const newCursorOffset = selectionStart + 1;
 
       // eslint-disable-next-line no-param-reassign
       inputRef.current.value = newValue;
@@ -89,7 +114,7 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
       templateRows="repeat(5, 1fr)"
       gridAutoFlow="row dense"
     >
-      <Key colorScheme="gray" colStart={12} colSpan={2}>
+      <Key onClick={erase} colorScheme="gray" colStart={12} colSpan={2}>
         <MdBackspace />
       </Key>
       <Key colorScheme="gray" rowStart={3} colStart={13}>
