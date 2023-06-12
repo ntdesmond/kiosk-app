@@ -1,18 +1,5 @@
-import { useCallback, useMemo, useState } from 'react';
-import {
-  Box,
-  Step,
-  StepIcon,
-  StepIndicator,
-  StepNumber,
-  StepSeparator,
-  StepStatus,
-  StepTitle,
-  Stepper,
-  VStack,
-  useBoolean,
-  useSteps,
-} from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
+import { Box, VStack, useBoolean } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Header from '../components/layout/Header';
@@ -25,6 +12,8 @@ import {
 } from '../components/forms/FormInput';
 import Review from '../components/forms/review/Review';
 import ReviewSection from '../components/forms/review/ReviewSection';
+import Steps from '../components/forms/steps/Steps';
+import Step from '../components/forms/steps/Step';
 
 interface RequestForm {
   telegram: string;
@@ -55,19 +44,7 @@ const NewRequest = () => {
     [showLoading, hideLoading, onSuccess],
   );
 
-  const { activeStep, setActiveStep } = useSteps({
-    count: 4,
-  });
-
-  // Avoid unnecessary re-renders on input
-  const goToNext = useCallback(() => setActiveStep((step) => step + 1), [setActiveStep]);
-
   const formData = watch();
-
-  const steps = useMemo(
-    () => [t('stepTelegram'), t('stepRequestSubject'), t('stepRequestBody'), t('stepReview')],
-    [t],
-  );
 
   return (
     <>
@@ -81,72 +58,60 @@ const NewRequest = () => {
       <VStack spacing="8">
         <Header title={t('newRequestTitle')} />
         <Box alignSelf="stretch">
-          <Stepper index={activeStep} marginBottom="10">
-            {steps.map((step, index) => (
-              <Step key={step} onClick={() => setActiveStep(index)}>
-                <StepIndicator>
-                  <StepStatus
-                    complete={<StepIcon />}
-                    incomplete={<StepNumber />}
-                    active={<StepNumber />}
-                  />
-                </StepIndicator>
-                <Box flexShrink="0">
-                  <StepTitle>{step}</StepTitle>
-                </Box>
-                <StepSeparator />
+          <Steps>
+            {({ goToNext, isShown }) => (
+              <Step isShown={isShown} title={t('stepTelegram')}>
+                <TelegramInput
+                  errors={formState.errors}
+                  onDone={goToNext}
+                  register={register}
+                  name="telegram"
+                />
               </Step>
-            ))}
-          </Stepper>
-          <Box display={activeStep === 0 ? 'block' : 'none'}>
-            <TelegramInput
-              errors={formState.errors}
-              onDone={goToNext}
-              register={register}
-              name="telegram"
-            />
-          </Box>
-          <Box display={activeStep === 1 ? 'block' : 'none'}>
-            <RequestSubjectInput
-              errors={formState.errors}
-              onDone={goToNext}
-              register={register}
-              name="subject"
-            />
-          </Box>
-
-          <Box display={activeStep === 2 ? 'block' : 'none'}>
-            <RequestBodyInput
-              errors={formState.errors}
-              onDone={goToNext}
-              register={register}
-              name="body"
-            />
-          </Box>
-          <Box display={activeStep === 3 ? 'block' : 'none'}>
-            <Review
-              onSend={handleSubmit(onSend)}
-              isSending={isLoading}
-              isSendDisabled={!formState.isValid}
-            >
-              <ReviewSection
-                i18nPrefix="telegram"
-                prependText="@"
-                onEdit={() => setActiveStep(0)}
-                text={formData.telegram}
-              />
-              <ReviewSection
-                i18nPrefix="subject"
-                onEdit={() => setActiveStep(1)}
-                text={formData.subject}
-              />
-              <ReviewSection
-                i18nPrefix="request"
-                onEdit={() => setActiveStep(2)}
-                text={formData.body}
-              />
-            </Review>
-          </Box>
+            )}
+            {({ goToNext, isShown }) => (
+              <Step isShown={isShown} title={t('stepRequestSubject')}>
+                <RequestSubjectInput
+                  errors={formState.errors}
+                  onDone={goToNext}
+                  register={register}
+                  name="subject"
+                />
+              </Step>
+            )}
+            {({ goToNext, isShown }) => (
+              <Step isShown={isShown} title={t('stepRequestBody')}>
+                <RequestBodyInput
+                  errors={formState.errors}
+                  onDone={goToNext}
+                  register={register}
+                  name="body"
+                />
+              </Step>
+            )}
+            {({ goTo, isShown }) => (
+              <Step isShown={isShown} title={t('stepReview')}>
+                <Review
+                  onSend={handleSubmit(onSend)}
+                  isSending={isLoading}
+                  isSendDisabled={!formState.isValid}
+                >
+                  <ReviewSection
+                    i18nPrefix="telegram"
+                    prependText="@"
+                    onEdit={() => goTo(0)}
+                    text={formData.telegram}
+                  />
+                  <ReviewSection
+                    i18nPrefix="subject"
+                    onEdit={() => goTo(1)}
+                    text={formData.subject}
+                  />
+                  <ReviewSection i18nPrefix="request" onEdit={() => goTo(2)} text={formData.body} />
+                </Review>
+              </Step>
+            )}
+          </Steps>
         </Box>
       </VStack>
     </>
