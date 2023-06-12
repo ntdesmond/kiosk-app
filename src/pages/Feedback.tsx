@@ -14,69 +14,52 @@ import {
   useSteps,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import Header from '../components/layout/Header';
 import ErrorModal from '../components/layout/ErrorModal';
 import SuccessModal from '../components/layout/SuccessModal';
 import { TelegramInput, FeedbackInput } from '../components/forms/FormInput';
 import Review from '../components/forms/review/Review';
-import { ReviewSectionProps } from '../components/forms/review/ReviewSection';
+import ReviewSection from '../components/forms/review/ReviewSection';
+
+interface FeedbackForm {
+  telegram: string;
+  feedback: string;
+}
 
 const Feedback = () => {
   const { t } = useTranslation();
   const [error, setError] = useState('');
   const [isSuccess, { on: onSuccess }] = useBoolean();
   const [isLoading, { on: showLoading, off: hideLoading }] = useBoolean();
-  const [telegram, setTelegram] = useState('');
-  const [feedback, setFeedback] = useState('');
 
-  const onSend = useCallback(() => {
-    showLoading();
-    window.electronAPI.sendFeedback(telegram, feedback).then((result) => {
-      hideLoading();
-      if (result.ok) {
-        onSuccess();
-        return;
-      }
-      setError(result.error);
-    });
-  }, [showLoading, telegram, feedback, hideLoading, onSuccess]);
+  const { register, handleSubmit, watch, formState } = useForm<FeedbackForm>({ mode: 'onChange' });
 
-  const { activeStep, setActiveStep, goToNext } = useSteps({
+  const onSend = useCallback<SubmitHandler<FeedbackForm>>(
+    ({ telegram, feedback }) => {
+      showLoading();
+      window.electronAPI.sendFeedback(telegram, feedback).then((result) => {
+        hideLoading();
+        if (result.ok) {
+          onSuccess();
+          return;
+        }
+        setError(result.error);
+      });
+    },
+    [showLoading, hideLoading, onSuccess],
+  );
+
+  const { activeStep, setActiveStep } = useSteps({
     count: 3,
   });
 
-  const reviewEntries = useMemo<ReviewSectionProps[]>(
-    () => [
-      { i18nPrefix: 'telegram', text: telegram, prependText: '@', onEdit: () => setActiveStep(0) },
-      { i18nPrefix: 'feedback', text: feedback, onEdit: () => setActiveStep(1) },
-    ],
-    [feedback, setActiveStep, telegram],
-  );
+  // Avoid unnecessary re-renders on input
+  const goToNext = useCallback(() => setActiveStep((step) => step + 1), [setActiveStep]);
 
-  const steps = useMemo(
-    () => [
-      {
-        title: t('stepTelegram'),
-        element: <TelegramInput onDone={goToNext} defaultValue={telegram} onChange={setTelegram} />,
-      },
-      {
-        title: t('stepFeedback'),
-        element: <FeedbackInput onDone={goToNext} defaultValue={feedback} onChange={setFeedback} />,
-      },
-      {
-        title: t('stepReview'),
-        element: (
-          <Review
-            entries={reviewEntries}
-            onSend={onSend}
-            isSending={isLoading}
-            isSendDisabled={!telegram || !feedback}
-          />
-        ),
-      },
-    ],
-    [feedback, goToNext, isLoading, onSend, reviewEntries, t, telegram],
-  );
+  const formData = watch();
+
+  const steps = useMemo(() => [t('stepTelegram'), t('stepFeedback'), t('stepReview')], [t]);
 
   return (
     <>
@@ -92,7 +75,7 @@ const Feedback = () => {
         <Box alignSelf="stretch">
           <Stepper index={activeStep} marginBottom="10">
             {steps.map((step, index) => (
-              <Step key={step.title} onClick={() => setActiveStep(index)}>
+              <Step key={step} onClick={() => setActiveStep(index)}>
                 <StepIndicator>
                   <StepStatus
                     complete={<StepIcon />}
@@ -101,13 +84,49 @@ const Feedback = () => {
                   />
                 </StepIndicator>
                 <Box flexShrink="0">
-                  <StepTitle>{step.title}</StepTitle>
+                  <StepTitle>{step}</StepTitle>
                 </Box>
                 <StepSeparator />
               </Step>
             ))}
           </Stepper>
-          {steps[activeStep].element}
+
+          <Box display={activeStep === 0 ? 'block' : 'none'}>
+            <TelegramInput
+              errors={formState.errors}
+              onDone={goToNext}
+              register={register}
+              name="telegram"
+            />
+          </Box>
+
+          <Box display={activeStep === 1 ? 'block' : 'none'}>
+            <FeedbackInput
+              errors={formState.errors}
+              onDone={goToNext}
+              register={register}
+              name="feedback"
+            />
+          </Box>
+          <Box display={activeStep === 2 ? 'block' : 'none'}>
+            <Review
+              onSend={handleSubmit(onSend)}
+              isSending={isLoading}
+              isSendDisabled={!formState.isValid}
+            >
+              <ReviewSection
+                i18nPrefix="telegram"
+                prependText="@"
+                onEdit={() => setActiveStep(0)}
+                text={formData.telegram}
+              />
+              <ReviewSection
+                i18nPrefix="feedback"
+                onEdit={() => setActiveStep(1)}
+                text={formData.feedback}
+              />
+            </Review>
+          </Box>
         </Box>
       </VStack>
     </>

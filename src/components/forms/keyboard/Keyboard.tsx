@@ -1,5 +1,5 @@
 import { Grid, GridItem, useBoolean } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   MdBackspace,
@@ -21,7 +21,7 @@ const layouts: Record<Language | 'symbols', string> = {
   symbols: '@`#№&_—!^$₽%-|/\\?()<>+:;,[]{}*\'"=',
 };
 
-const Keyboard = ({ onDone }: { onDone: () => void }) => {
+const Keyboard = memo(({ onDone }: { onDone: () => void }) => {
   const { t, i18n } = useTranslation();
   const [isShowingSymbols, { toggle: toggleSymbols }] = useBoolean();
   const [uppercase, setUppercase] = useState<UppercaseStatus>('off');
@@ -106,6 +106,6 @@ const Keyboard = ({ onDone }: { onDone: () => void }) => {
       ))}
     </Grid>
   );
-};
+});
 
 export default Keyboard;

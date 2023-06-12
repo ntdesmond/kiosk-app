@@ -4,70 +4,39 @@ import {
   InputGroup,
   Input,
   FormHelperText,
-  Textarea,
   InputLeftElement,
-  TextareaProps,
   InputProps,
-  useBoolean,
   FormErrorMessage,
   TypographyProps,
   VStack,
+  forwardRef,
+  Textarea,
 } from '@chakra-ui/react';
-import { ChangeEventHandler, ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FieldErrors, FieldPath, FieldValues, UseFormRegister } from 'react-hook-form';
 import Keyboard from './keyboard/Keyboard';
 
-type FormInputProps = {
-  i18nPrefix: string;
-  isMultiline?: boolean;
+interface FormInputProps {
+  label: string;
+  hint: string;
+  error?: string;
+  placeholder: string;
   leftElement?: ReactNode;
-  onChange: (value: string) => void;
   onDone: () => void;
-} & Pick<TextareaProps & InputProps, 'minLength' | 'maxLength' | 'pattern' | 'defaultValue'>;
-
-interface TypedInputProps {
-  onDone: () => void;
-  onChange: (value: string) => void;
-  defaultValue: string;
+  isInvalid: boolean;
 }
+
+type TypedFormInputProps<TName extends FieldPath<TForm>, TForm extends FieldValues> = {
+  name: TName;
+  register: UseFormRegister<TForm>;
+  errors: FieldErrors<TForm>;
+} & Pick<FormInputProps, 'onDone'>;
 
 const inputFontSize: TypographyProps['fontSize'] = ['sm', null, null, '2xl', '3xl'];
 
-const FormInput = ({
-  i18nPrefix,
-  isMultiline,
-  leftElement,
-  pattern,
-  minLength,
-  maxLength,
-  onChange: changeCallback,
-  defaultValue,
-  onDone,
-}: FormInputProps) => {
-  const { t } = useTranslation();
-  const [isInvalid, { on: onInvalid, off: onValid }] = useBoolean(false);
-
-  const onChange = useCallback<ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>>(
-    ({ target }) => {
-      if (target.value !== '' && !target.checkValidity()) {
-        onInvalid();
-        changeCallback('');
-        return;
-      }
-      onValid();
-      changeCallback(target.value);
-    },
-    [changeCallback, onInvalid, onValid],
-  );
-
-  const label = useMemo(() => t(`${i18nPrefix}Input`), [i18nPrefix, t]);
-  const hint = useMemo(() => t(`${i18nPrefix}InputHint`), [i18nPrefix, t]);
-  const placeholder = useMemo(() => t(`${i18nPrefix}InputPlaceholder`), [i18nPrefix, t]);
-  const errorText = useMemo(() => t(`${i18nPrefix}InputError`), [i18nPrefix, t]);
-
-  const TargetElement = useMemo(() => (isMultiline ? Textarea : Input), [isMultiline]);
-
-  return (
+const FormInput = forwardRef<InputProps & FormInputProps, 'input'>(
+  ({ label, error, hint, leftElement, onDone, isInvalid, ...props }, ref) => (
     <VStack spacing="10" align="stretch" overflow="visible" marginX="-10">
       <FormControl isInvalid={isInvalid} isRequired paddingX="16">
         <FormLabel fontSize={['md', null, null, '3xl', '5xl']}>{label}</FormLabel>
@@ -85,65 +54,130 @@ const FormInput = ({
               {leftElement}
             </InputLeftElement>
           )}
-          <TargetElement
+          <Input
+            ref={ref}
             paddingLeft={leftElement ? ['8', '8', null, null, '10'] : undefined}
             borderWidth="0.1em"
             fontSize={inputFontSize}
             size={['md', null, null, 'lg']}
-            placeholder={placeholder}
             resize="none"
-            minHeight={isMultiline ? '3xs' : '0'}
             autoFocus
-            {...{ onChange, pattern, minLength, maxLength, defaultValue, onDone }}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...props}
           />
         </InputGroup>
         {isInvalid ? (
-          <FormErrorMessage fontSize={inputFontSize}>{errorText}</FormErrorMessage>
+          <FormErrorMessage fontSize={inputFontSize}>{error}</FormErrorMessage>
         ) : (
           <FormHelperText fontSize={inputFontSize}>{hint}</FormHelperText>
         )}
       </FormControl>
       <Keyboard onDone={onDone} />
     </VStack>
-  );
-};
+  ),
+);
 
 export default FormInput;
 
-export const FeedbackInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
-  <FormInput
-    i18nPrefix="feedback"
-    isMultiline
-    minLength={10}
-    {...{ onChange, defaultValue, onDone }}
-  />
-);
+/* eslint-disable react/jsx-props-no-spreading */
 
-export const RequestBodyInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
-  <FormInput
-    i18nPrefix="request"
-    isMultiline
-    minLength={10}
-    {...{ onChange, defaultValue, onDone }}
-  />
-);
+export const FeedbackInput = <TName extends FieldPath<TForm>, TForm extends FieldValues>({
+  register,
+  name,
+  errors,
+  onDone,
+}: TypedFormInputProps<TName, TForm>) => {
+  const { t } = useTranslation();
 
-export const RequestSubjectInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
-  <FormInput
-    i18nPrefix="subject"
-    minLength={3}
-    maxLength={40}
-    {...{ onChange, defaultValue, onDone }}
-  />
-);
+  return (
+    <FormInput
+      as={Textarea}
+      minHeight="3xs"
+      label={t('feedbackInput')}
+      placeholder={t('feedbackInputPlaceholder')}
+      hint={t('feedbackInputHint')}
+      isInvalid={errors[name] !== undefined}
+      onDone={onDone}
+      {...register(name, {
+        required: t('feedbackInputRequired') as string,
+        minLength: { value: 10, message: t('feedbackInputTooShort') },
+      })}
+    />
+  );
+};
 
-export const TelegramInput = ({ onChange, defaultValue, onDone }: TypedInputProps) => (
-  <FormInput
-    i18nPrefix="telegram"
-    leftElement="@"
-    minLength={4}
-    maxLength={32}
-    pattern="[A-Za-z0-9_]{4,32}"
-    {...{ onChange, defaultValue, onDone }}
-  />
-);
+export const RequestBodyInput = <TName extends FieldPath<TForm>, TForm extends FieldValues>({
+  register,
+  name,
+  errors,
+  onDone,
+}: TypedFormInputProps<TName, TForm>) => {
+  const { t } = useTranslation();
+  return (
+    <FormInput
+      as={Textarea}
+      minHeight="3xs"
+      label={t('requestInput')}
+      placeholder={t('requestInputPlaceholder')}
+      hint={t('requestInputHint')}
+      error={errors[name]?.message as string}
+      isInvalid={errors[name] !== undefined}
+      onDone={onDone}
+      {...register(name, {
+        required: t('requestInputRequired') as string,
+        minLength: { value: 10, message: t('requestInputTooShort') },
+      })}
+    />
+  );
+};
+
+export const RequestSubjectInput = <TName extends FieldPath<TForm>, TForm extends FieldValues>({
+  register,
+  name,
+  errors,
+  onDone,
+}: TypedFormInputProps<TName, TForm>) => {
+  const { t } = useTranslation();
+  return (
+    <FormInput
+      label={t('subjectInput')}
+      placeholder={t('subjectInputPlaceholder')}
+      hint={t('subjectInputHint')}
+      error={errors[name]?.message as string}
+      isInvalid={errors[name] !== undefined}
+      onDone={onDone}
+      {...register(name, {
+        required: t('subjectInputRequired') as string,
+        minLength: { value: 3, message: t('subjectInputTooShort') },
+        maxLength: 40,
+      })}
+    />
+  );
+};
+
+export const TelegramInput = <TName extends FieldPath<TForm>, TForm extends FieldValues>({
+  register,
+  name,
+  errors,
+  onDone,
+}: TypedFormInputProps<TName, TForm>) => {
+  const { t } = useTranslation();
+
+  return (
+    <FormInput
+      label={t('telegramInput')}
+      placeholder={t('telegramInputPlaceholder')}
+      hint={t('telegramInputHint')}
+      error={errors[name]?.message as string}
+      leftElement="@"
+      isInvalid={errors[name] !== undefined}
+      onDone={onDone}
+      {...register(name, {
+        required: t('telegramInputRequired') as string,
+        minLength: { value: 4, message: t('telegramInputTooShort') },
+        maxLength: 32,
+        pattern: { value: /^[A-Za-z0-9_]+$/, message: t('telegramInputInvalid') },
+      })}
+    />
+  );
+};
