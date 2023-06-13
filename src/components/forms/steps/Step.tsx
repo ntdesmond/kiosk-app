@@ -22,7 +22,11 @@ const Step = memo(({ children, title }: StepProps) => {
     return children;
   }, [children, goToNext, setActiveStep]);
 
-  return <Box display={activeStepTitle === title ? 'block' : 'none'}>{content}</Box>;
+  return (
+    <Box display={activeStepTitle === title ? 'block' : 'none'} minHeight="0">
+      {content}
+    </Box>
+  );
 });
 
 export default Step;

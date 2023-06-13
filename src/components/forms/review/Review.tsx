@@ -14,7 +14,7 @@ interface ReviewProps {
 const Review = ({ children, onSend, isSendDisabled, isSending }: ReviewProps) => {
   const { t } = useTranslation();
   return (
-    <VStack align="stretch" spacing="10">
+    <VStack align="stretch" spacing="10" height="100%">
       {children}
       <Button
         leftIcon={<MdSend />}
@@ -22,6 +22,7 @@ const Review = ({ children, onSend, isSendDisabled, isSending }: ReviewProps) =>
         isLoading={isSending}
         isDisabled={isSendDisabled}
         onClick={onSend}
+        minHeight={10}
       >
         {t('reviewSend')}
       </Button>

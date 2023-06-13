@@ -8,6 +8,7 @@ import {
   StepStatus,
   StepTitle,
   Stepper,
+  VStack,
   useSteps,
 } from '@chakra-ui/react';
 import { ReactElement, useCallback, useMemo } from 'react';
@@ -32,26 +33,28 @@ const Steps = ({ children }: StepsProps) => {
   );
 
   return (
-    <StepsContext.Provider value={contextValue}>
-      <Stepper index={activeStep} marginBottom="10">
-        {children.map((step, index) => (
-          <Step key={step.props.title} onClick={() => setActiveStep(index)}>
-            <StepIndicator>
-              <StepStatus
-                complete={<StepIcon />}
-                incomplete={<StepNumber />}
-                active={<StepNumber />}
-              />
-            </StepIndicator>
-            <Box flexShrink="0">
-              <StepTitle>{step.props.title}</StepTitle>
-            </Box>
-            <StepSeparator />
-          </Step>
-        ))}
-      </Stepper>
-      {children}
-    </StepsContext.Provider>
+    <VStack align="stretch" spacing={10} height="100%">
+      <StepsContext.Provider value={contextValue}>
+        <Stepper index={activeStep}>
+          {children.map((step, index) => (
+            <Step key={step.props.title} onClick={() => setActiveStep(index)}>
+              <StepIndicator>
+                <StepStatus
+                  complete={<StepIcon />}
+                  incomplete={<StepNumber />}
+                  active={<StepNumber />}
+                />
+              </StepIndicator>
+              <Box flexShrink="0">
+                <StepTitle>{step.props.title}</StepTitle>
+              </Box>
+              <StepSeparator />
+            </Step>
+          ))}
+        </Stepper>
+        {children}
+      </StepsContext.Provider>
+    </VStack>
   );
 };
 

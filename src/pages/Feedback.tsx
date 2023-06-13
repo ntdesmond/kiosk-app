@@ -57,9 +57,9 @@ const Feedback = () => {
         onClose={() => setError('')}
         i18nPrefix="feedback"
       />
-      <VStack spacing="8">
+      <VStack spacing="8" height="100%">
         <Header title={t('feedbackTitle')} />
-        <Box alignSelf="stretch">
+        <Box alignSelf="stretch" minHeight="0">
           <Steps>
             <Step title={t('stepTelegram')}>
               {({ goToNext }) => (

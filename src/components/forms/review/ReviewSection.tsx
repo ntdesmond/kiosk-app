@@ -15,7 +15,7 @@ const ReviewSection = ({ text, i18nPrefix, onEdit, prependText }: ReviewSectionP
   const label = useMemo(() => t(`${i18nPrefix}Input`), [i18nPrefix, t]);
 
   return (
-    <VStack align="stretch">
+    <VStack align="stretch" minHeight={20}>
       <HStack>
         <Heading size="md">{label}</Heading>
         <Button leftIcon={<MdEdit />} onClick={onEdit}>
@@ -23,7 +23,7 @@ const ReviewSection = ({ text, i18nPrefix, onEdit, prependText }: ReviewSectionP
         </Button>
       </HStack>
       {text ? (
-        <Text>
+        <Text whiteSpace="pre-line" minHeight="0" overflowY="auto">
           {prependText}
           {text}
         </Text>
