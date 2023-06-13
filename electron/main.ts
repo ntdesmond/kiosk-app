@@ -51,6 +51,10 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.on('web-contents-created', (_, contents) => {
+  contents.on('will-navigate', (event) => event.preventDefault());
+});
+
 app.whenReady().then(() => {
   setupIpc();
   createWindow();
