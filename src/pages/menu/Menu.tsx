@@ -9,7 +9,7 @@ const Menu = () => {
   return (
     <Grid templateRows="repeat(3, 1fr)" templateColumns="repeat(2, 1fr)" gap="10" height="100%">
       <GridItem colSpan={2}>
-        <MenuTile caption={t('faq')} icon={MdQuestionAnswer} target="/faq" isDisabled />
+        <MenuTile caption={t('manuals')} icon={MdQuestionAnswer} target="/manuals" />
       </GridItem>
       <GridItem colSpan={2}>
         <MenuTile caption={t('newRequest')} icon={MdCreate} target="/request" />

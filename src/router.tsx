@@ -4,6 +4,7 @@ import Menu from './pages/menu/Menu';
 import Contacts from './pages/Contacts';
 import NewRequest from './pages/NewRequest';
 import Feedback from './pages/Feedback';
+import Manuals from './pages/faq/Manuals';
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Menu />,
+      },
+      {
+        path: 'manuals',
+        element: <Manuals />,
       },
       {
         path: 'request',
