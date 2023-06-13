@@ -16,24 +16,25 @@ const Layout = () => {
   const timeoutId = useRef<NodeJS.Timeout>();
 
   const enableTimeout = useCallback(() => {
+    if (isInactive || pathname === '/') {
+      return;
+    }
     timeoutId.current = setTimeout(showInactivityModal, inactiveTimeout);
-  }, [showInactivityModal]);
+  }, [isInactive, pathname, showInactivityModal]);
 
   const disableTimeout = useCallback(() => {
     clearTimeout(timeoutId.current);
   }, []);
 
-  useEffect(() => {
-    if (!isInactive && pathname !== '/') {
-      enableTimeout();
-    }
-    return disableTimeout;
-  }, [disableTimeout, enableTimeout, isInactive, pathname]);
-
   const resetTimeout = useCallback(() => {
     disableTimeout();
     enableTimeout();
   }, [disableTimeout, enableTimeout]);
+
+  useEffect(() => {
+    enableTimeout();
+    return disableTimeout;
+  }, [disableTimeout, enableTimeout, isInactive, pathname, resetTimeout]);
 
   return (
     <>
