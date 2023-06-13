@@ -7,7 +7,7 @@ const NumbersGrid = ({ appendChar }: { appendChar: (char: string) => void }) => 
       0
     </Key>
     {[...'123456789.'].map((letter) => (
-      <Key onClick={() => appendChar(letter)} key="letter">
+      <Key onClick={() => appendChar(letter)} key={letter}>
         {letter}
       </Key>
     ))}
