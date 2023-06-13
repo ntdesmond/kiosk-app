@@ -5,7 +5,7 @@ export type KeyProps = GridItemProps & ButtonProps;
 const Key = forwardRef<KeyProps, 'div'>(
   ({ colorScheme, children, onClick, bgColor, ...props }, ref) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <GridItem minHeight={16} {...props} ref={ref}>
+    <GridItem minHeight={[10, null, null, 16]} {...props} ref={ref}>
       <Button
         // remove hover effect
         _hover={{ bg: '' }}
@@ -13,7 +13,7 @@ const Key = forwardRef<KeyProps, 'div'>(
         _before={{ content: `""`, position: 'absolute', inset: 0 }}
         width="100%"
         height="100%"
-        fontSize="4xl"
+        fontSize={['xl', null, null, '4xl']}
         outline="0.15em solid"
         outlineColor="white"
         outlineOffset="-0.1em"
