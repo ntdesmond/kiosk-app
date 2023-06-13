@@ -21,7 +21,7 @@ const ErrorModal = ({
   isOpen: boolean;
   onClose: () => void;
   error: string;
-  i18nPrefix: 'newRequest' | 'feedback';
+  i18nPrefix: string;
 }) => {
   const { t } = useTranslation();
 
