@@ -88,12 +88,14 @@ const Feedback = () => {
                 >
                   <ReviewSection
                     i18nPrefix="telegram"
+                    error={errors.telegram?.message}
                     prependText="@"
                     onEdit={() => goTo(0)}
                     text={formData.telegram}
                   />
                   <ReviewSection
                     i18nPrefix="feedback"
+                    error={errors.feedback?.message}
                     onEdit={() => goTo(1)}
                     text={formData.feedback}
                   />

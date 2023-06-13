@@ -104,16 +104,23 @@ const NewRequest = () => {
                 >
                   <ReviewSection
                     i18nPrefix="telegram"
+                    error={errors.telegram?.message}
                     prependText="@"
                     onEdit={() => goTo(0)}
                     text={formData.telegram}
                   />
                   <ReviewSection
                     i18nPrefix="subject"
+                    error={errors.subject?.message}
                     onEdit={() => goTo(1)}
                     text={formData.subject}
                   />
-                  <ReviewSection i18nPrefix="request" onEdit={() => goTo(2)} text={formData.body} />
+                  <ReviewSection
+                    i18nPrefix="request"
+                    error={errors.body?.message}
+                    onEdit={() => goTo(2)}
+                    text={formData.body}
+                  />
                 </Review>
               )}
             </Step>

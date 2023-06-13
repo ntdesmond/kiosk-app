@@ -30,20 +30,20 @@ i18n.use(initReactI18next).init({
         subjectInput: 'Request title',
         subjectInputPlaceholder: 'Give a short description of your request',
         subjectInputHint: '3 to 40 characters',
-        subjectInputTooShort: 'Must be at least 3 characters',
+        subjectInputTooShort: 'Must be at least 3 characters long',
         subjectInputTooLong: 'Maximum length exceeded',
         subjectInputRequired: 'Please fill out this field',
 
         requestInput: 'Request body',
         requestInputPlaceholder: 'State your problem in details here',
         requestInputHint: 'Minimum 10 characters',
-        requestInputTooShort: 'Must be at least 10 characters',
+        requestInputTooShort: 'Must be at least 10 characters long',
         requestInputRequired: 'Please fill out this field',
 
         feedbackInput: 'Your feedback',
         feedbackInputPlaceholder: 'Tell us what you think',
         feedbackInputHint: 'Minimum 10 characters',
-        feedbackInputTooShort: 'Must be at least 10 characters',
+        feedbackInputTooShort: 'Must be at least 10 characters long',
         feedbackInputRequired: 'Please fill out this field',
 
         successModalTitle: 'Success',
