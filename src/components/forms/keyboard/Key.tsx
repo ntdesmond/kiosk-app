@@ -1,6 +1,6 @@
 import { Button, ButtonProps, GridItem, GridItemProps, forwardRef } from '@chakra-ui/react';
 
-export type KeyProps = GridItemProps & ButtonProps;
+export type KeyProps = GridItemProps & ButtonProps & Required<Pick<ButtonProps, 'onClick'>>;
 
 const Key = forwardRef<KeyProps, 'div'>(
   ({ colorScheme, children, onClick, bgColor, ...props }, ref) => (

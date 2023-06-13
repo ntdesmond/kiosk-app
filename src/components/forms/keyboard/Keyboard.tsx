@@ -54,6 +54,33 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
     return layouts[language];
   }, [isShowingSymbols, language, uppercase]);
 
+  const moveLeft = useCallback(() => {
+    if (!inputRef.current) {
+      return;
+    }
+    const { selectionStart, selectionEnd } = inputRef.current;
+    if (selectionStart === null || selectionEnd === null) {
+      return;
+    }
+
+    const newCursorOffset =
+      selectionStart > 0 && selectionStart === selectionEnd ? selectionStart - 1 : selectionStart;
+    inputRef.current.setSelectionRange(newCursorOffset, newCursorOffset);
+  }, [inputRef]);
+
+  const moveRight = useCallback(() => {
+    if (!inputRef.current) {
+      return;
+    }
+    const { selectionStart, selectionEnd } = inputRef.current;
+    if (selectionStart === null || selectionEnd === null) {
+      return;
+    }
+
+    const newCursorOffset = selectionStart === selectionEnd ? selectionEnd + 1 : selectionEnd;
+    inputRef.current.setSelectionRange(newCursorOffset, newCursorOffset);
+  }, [inputRef]);
+
   const erase = useCallback(() => {
     if (!inputRef.current) {
       return;
@@ -99,6 +126,13 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
     [inputRef, onInputChange],
   );
 
+  const appendNewline = useCallback(() => {
+    if (!inputRef.current || inputRef.current.type !== 'textarea') {
+      return;
+    }
+    appendChar('\n');
+  }, [appendChar, inputRef]);
+
   const keepInputFocused = useCallback<MouseEventHandler>(
     (event) => {
       event.stopPropagation();
@@ -117,7 +151,7 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
       <Key onClick={erase} colorScheme="gray" colStart={12} colSpan={2}>
         <MdBackspace />
       </Key>
-      <Key colorScheme="gray" rowStart={3} colStart={13}>
+      <Key onClick={appendNewline} colorScheme="gray" rowStart={3} colStart={13}>
         <MdKeyboardReturn />
       </Key>
       {!isShowingSymbols && (
@@ -143,13 +177,13 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
       >
         <MdLanguage />
       </Key>
-      <Key rowStart={5} colStart={4} colEnd={10}>
+      <Key onClick={() => appendChar(' ')} rowStart={5} colStart={4} colEnd={10}>
         {' '}
       </Key>
-      <Key colorScheme="gray" rowStart={5} colStart={10}>
+      <Key onClick={moveLeft} colorScheme="gray" rowStart={5} colStart={10}>
         <MdKeyboardArrowLeft />
       </Key>
-      <Key colorScheme="gray" rowStart={5} colStart={11}>
+      <Key onClick={moveRight} colorScheme="gray" rowStart={5} colStart={11}>
         <MdKeyboardArrowRight />
       </Key>
       <Key colorScheme="gray" rowStart={5} colStart={12} colSpan={2} onClick={onDone}>
@@ -157,7 +191,7 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
       </Key>
       {isShowingSymbols && (
         <GridItem marginX="12.5%" colStart={6} colSpan={4} rowSpan={4}>
-          <NumbersGrid />
+          <NumbersGrid appendChar={appendChar} />
         </GridItem>
       )}
       {[...layout].map((letter) => (
