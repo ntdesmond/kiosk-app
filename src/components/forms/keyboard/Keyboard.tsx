@@ -122,8 +122,12 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
       inputRef.current.setSelectionRange(newCursorOffset, newCursorOffset);
 
       onInputChange(newValue);
+
+      if (uppercase === 'once') {
+        setUppercase('off');
+      }
     },
-    [inputRef, onInputChange],
+    [inputRef, onInputChange, uppercase],
   );
 
   const appendNewline = useCallback(() => {
@@ -160,7 +164,7 @@ const Keyboard = memo(({ onDone, inputRef, onInputChange }: KeyboardProps) => {
           rowStart={4}
           colSpan={2}
           onClick={() => setUppercase(uppercase === 'off' ? 'once' : 'off')}
-          onDoubleClick={() => setUppercase(uppercase === 'off' ? 'on' : 'off')}
+          onDoubleClick={() => setUppercase(uppercase === 'once' ? 'on' : 'off')}
           bgColor={uppercase !== 'off' ? 'gray.200' : undefined}
         >
           {shiftKeyIcon}
