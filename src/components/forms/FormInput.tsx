@@ -10,6 +10,7 @@ import {
   TypographyProps,
   VStack,
   forwardRef,
+  Box,
 } from '@chakra-ui/react';
 import { ReactNode, memo, useRef } from 'react';
 import Keyboard from './keyboard/Keyboard';
@@ -35,7 +36,7 @@ const FormInput = memo(
     ) => {
       const inputRef = useRef<HTMLInputElement | null>(null);
       return (
-        <VStack spacing="10" align="stretch" overflow="visible" marginX="-10">
+        <VStack spacing="2" align="stretch" overflow="visible" marginX="-10">
           <FormControl isInvalid={isInvalid} isRequired paddingX="16">
             <FormLabel fontSize={['md', null, null, '3xl', '5xl']}>{label}</FormLabel>
             <InputGroup>
@@ -76,11 +77,12 @@ const FormInput = memo(
                 {...props}
               />
             </InputGroup>
-            {isInvalid ? (
-              <FormErrorMessage fontSize={inputFontSize}>{error}</FormErrorMessage>
-            ) : (
-              <FormHelperText fontSize={inputFontSize}>{hint}</FormHelperText>
-            )}
+            <FormHelperText fontSize={inputFontSize}>{hint}</FormHelperText>
+            <Box minHeight="10">
+              <FormErrorMessage marginTop="0" fontSize={inputFontSize}>
+                {error}
+              </FormErrorMessage>
+            </Box>
           </FormControl>
           <Keyboard onDone={onDone} inputRef={inputRef} onInputChange={onInputChange} />
         </VStack>

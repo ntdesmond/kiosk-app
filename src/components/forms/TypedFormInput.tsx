@@ -47,6 +47,7 @@ export const FeedbackInput = <TName extends FieldPath<TForm>, TForm extends Fiel
       placeholder={t('feedbackInputPlaceholder')}
       hint={t('feedbackInputHint')}
       isInvalid={errors[name] !== undefined}
+      error={errors[name]?.message as string}
       onDone={onDone}
       onInputChange={onInputChange}
       {...register(name, {
@@ -121,7 +122,7 @@ export const RequestSubjectInput = <TName extends FieldPath<TForm>, TForm extend
       {...register(name, {
         required: t('subjectInputRequired') as string,
         minLength: { value: 3, message: t('subjectInputTooShort') },
-        maxLength: 40,
+        maxLength: { value: 40, message: t('subjectInputTooLong') },
       })}
     />
   );
@@ -157,7 +158,7 @@ export const TelegramInput = <TName extends FieldPath<TForm>, TForm extends Fiel
       {...register(name, {
         required: t('telegramInputRequired') as string,
         minLength: { value: 4, message: t('telegramInputTooShort') },
-        maxLength: 32,
+        maxLength: { value: 32, message: t('telegramInputTooLong') },
         pattern: { value: /^[A-Za-z0-9_]+$/, message: t('telegramInputInvalid') },
       })}
     />

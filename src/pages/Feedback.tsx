@@ -70,7 +70,7 @@ const Feedback = () => {
                 />
               )}
             </Step>
-            <Step title={t('stepRequestBody')}>
+            <Step title={t('stepFeedback')}>
               {({ goToNext }) => (
                 <FeedbackInput
                   onDone={goToNext}
