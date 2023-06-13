@@ -64,6 +64,11 @@ i18n.use(initReactI18next).init({
         reviewEdit: 'Edit',
         reviewFieldEmpty: 'empty',
         reviewSend: 'Send',
+
+        inactivityModalTitle: 'Confirm your presence',
+        inactivityMessage:
+          'It seems that the kiosk has been left unattended. Please confirm that you want to continue working with the kiosk.',
+        inactivityCancel: 'Continue',
       },
     },
     ru: {
@@ -127,6 +132,10 @@ i18n.use(initReactI18next).init({
         reviewEdit: 'Изменить',
         reviewFieldEmpty: 'не заполнено',
         reviewSend: 'Отправить',
+
+        inactivityModalTitle: 'Продолжение работы',
+        inactivityMessage: 'Пожалуйста, подтвердите, что вы хотите продолжить работу с киоском.',
+        inactivityCancel: 'Продолжить',
       },
     },
   },
