@@ -20,12 +20,18 @@ const Manuals = () => {
   const [fileError, setFileError] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [openedFile, setOpenedFile] = useState<File | null>(null);
-  const [_, setFilter] = useState('');
+  const [filter, setFilter] = useState('');
 
-  const files = useMemo(
-    () => allFiles?.filter(({ description }) => description[language as Language] !== '') || [],
-    [allFiles, language],
-  );
+  const files = useMemo(() => {
+    const filesByLanguage =
+      allFiles?.filter(({ description }) => description[language as Language] !== '') || [];
+    if (!filter) {
+      return filesByLanguage;
+    }
+    return filesByLanguage.filter(({ description }) =>
+      description[language as Language].includes(filter),
+    );
+  }, [allFiles, filter, language]);
 
   const errorMessage = useMemo(() => (error ? getErrorMessage(error) : ''), [error]);
 
