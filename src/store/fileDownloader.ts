@@ -13,7 +13,7 @@ const useFileDownloader = () => {
   const [file, setFile] = useState<File>();
 
   const getFile = useCallback(
-    async (id: string) => {
+    async (id: string, filename: string) => {
       onStartLoading();
       const result = await baseQuery(
         {
@@ -28,7 +28,7 @@ const useFileDownloader = () => {
       );
       onStopLoading();
       if (result.data) {
-        setFile(result.data as File);
+        setFile(new File([result.data as Blob], filename));
       }
       if (result.error) {
         setError(error as FetchBaseQueryError | SerializedError);

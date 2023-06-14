@@ -72,7 +72,7 @@ const FileViewModal = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent maxWidth="100%" marginX="4" marginY="4em" height="calc(100% - 8em)">
-        <ModalHeader>{t('fileViewTitle')}</ModalHeader>
+        <ModalHeader>{file?.name}</ModalHeader>
         <ModalCloseButton />
         <ModalBody flex="1">
           <VStack height="100%" width="100%">
@@ -87,7 +87,7 @@ const FileViewModal = ({
                     isDisabled={!canShowPrevious}
                   />
                   <Text marginX="4" fontSize="2xl">
-                    Page {pageNumber} of {totalPages}
+                    {t(`Page ${pageNumber} of ${totalPages}`)}
                   </Text>
                   <IconButton
                     size="lg"

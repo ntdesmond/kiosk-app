@@ -39,7 +39,7 @@ const FileRow = ({ id, description, onFileLoading, onFileLoaded, onError }: File
       bgColor="green.main"
       color="white"
       cursor="pointer"
-      onClick={() => getFile(id)}
+      onClick={() => getFile(id, description)}
     >
       <CardBody>{description}</CardBody>
     </Card>
