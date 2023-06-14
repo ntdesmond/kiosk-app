@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Spinner, VStack, useDisclosure } from '@chakra-ui/react';
+import { Box, Center, Spinner, VStack, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Header from '../../components/layout/Header';
 import SearchBar from './components/SearchBar';
@@ -49,7 +49,11 @@ const Manuals = () => {
         <Box alignSelf="stretch" minHeight="0">
           <SearchBar onChange={setFilter} />
           <VStack align="stretch">
-            {isLoading && <Spinner size="xl" />}
+            {isLoading && (
+              <Center>
+                <Spinner size="xl" />
+              </Center>
+            )}
             {files.map(({ id, description }) => (
               <FileRow
                 key={id}
