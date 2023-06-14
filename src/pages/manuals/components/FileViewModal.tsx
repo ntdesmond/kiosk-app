@@ -87,7 +87,7 @@ const FileViewModal = ({
                     isDisabled={!canShowPrevious}
                   />
                   <Text marginX="4" fontSize="2xl">
-                    {t(`Page ${pageNumber} of ${totalPages}`)}
+                    {t('pageNumber', { this: pageNumber, total: totalPages })}
                   </Text>
                   <IconButton
                     size="lg"
