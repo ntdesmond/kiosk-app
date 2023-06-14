@@ -41,7 +41,7 @@ const SearchBar = ({ onChange: changeCallback }: { onChange: (value: string) => 
 
   return (
     <Box ref={ref}>
-      <InputGroup marginBottom="8">
+      <InputGroup>
         <InputLeftElement>
           <MdSearch />
         </InputLeftElement>
@@ -66,7 +66,7 @@ const SearchBar = ({ onChange: changeCallback }: { onChange: (value: string) => 
       </InputGroup>
 
       <Collapse in={isOpen}>
-        <Box paddingBottom="8">
+        <Box paddingTop="8">
           <Keyboard inputRef={inputRef} onDone={onClose} onInputChange={onChange} />
         </Box>
       </Collapse>

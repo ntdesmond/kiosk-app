@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Center, Spinner, VStack, useDisclosure } from '@chakra-ui/react';
+import { Center, Spinner, VStack, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Header from '../../components/layout/Header';
 import SearchBar from './components/SearchBar';
@@ -50,28 +50,26 @@ const Manuals = () => {
         i18nPrefix="manualsFile"
       />
       <FileViewModal file={openedFile} {...{ isOpen, onClose }} />
-      <VStack spacing="8" height="100%">
+      <VStack align="stretch" spacing="8" height="100%">
         <Header title={t('manualsTitle')} />
-        <Box alignSelf="stretch" minHeight="0">
-          <SearchBar onChange={setFilter} />
-          <VStack align="stretch">
-            {isLoading && (
-              <Center>
-                <Spinner size="xl" />
-              </Center>
-            )}
-            {files.map(({ id, description }) => (
-              <FileRow
-                key={id}
-                id={id}
-                description={description[language as Language]}
-                onError={setFileError}
-                onFileLoading={onOpen}
-                onFileLoaded={setOpenedFile}
-              />
-            ))}
-          </VStack>
-        </Box>
+        <SearchBar onChange={setFilter} />
+        <VStack align="stretch" minHeight="0" overflowY="auto">
+          {isLoading && (
+            <Center>
+              <Spinner size="xl" />
+            </Center>
+          )}
+          {files.map(({ id, description }) => (
+            <FileRow
+              key={id}
+              id={id}
+              description={description[language as Language]}
+              onError={setFileError}
+              onFileLoading={onOpen}
+              onFileLoaded={setOpenedFile}
+            />
+          ))}
+        </VStack>
       </VStack>
     </>
   );
