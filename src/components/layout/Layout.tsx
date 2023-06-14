@@ -1,44 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { Box, VStack, useDisclosure } from '@chakra-ui/react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Box, VStack } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
 import Footer from './footer/Footer';
-import InactivityModal from './InactivityModal';
+import InactivityModal from '../inactivity/InactivityModal';
 
-const inactiveTimeout = 120 * 1000;
-
-const Layout = () => {
-  const { pathname } = useLocation();
-  const {
-    isOpen: isInactive,
-    onOpen: showInactivityModal,
-    onClose: closeInactivityModal,
-  } = useDisclosure();
-  const timeoutId = useRef<NodeJS.Timeout>();
-
-  const enableTimeout = useCallback(() => {
-    if (isInactive || pathname === '/') {
-      return;
-    }
-    timeoutId.current = setTimeout(showInactivityModal, inactiveTimeout);
-  }, [isInactive, pathname, showInactivityModal]);
-
-  const disableTimeout = useCallback(() => {
-    clearTimeout(timeoutId.current);
-  }, []);
-
-  const resetTimeout = useCallback(() => {
-    disableTimeout();
-    enableTimeout();
-  }, [disableTimeout, enableTimeout]);
-
-  useEffect(() => {
-    enableTimeout();
-    return disableTimeout;
-  }, [disableTimeout, enableTimeout, isInactive, pathname, resetTimeout]);
-
-  return (
-    <>
-      <InactivityModal isOpen={isInactive} onClose={closeInactivityModal} />
+const Layout = () => (
+  <InactivityModal defaultSeconds={120}>
+    {(resetTimeout) => (
       <VStack
         height="100%"
         alignItems="stretch"
@@ -53,8 +20,8 @@ const Layout = () => {
         </Box>
         <Footer />
       </VStack>
-    </>
-  );
-};
+    )}
+  </InactivityModal>
+);
 
 export default Layout;

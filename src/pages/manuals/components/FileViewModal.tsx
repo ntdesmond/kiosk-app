@@ -14,7 +14,7 @@ import {
   Icon,
   Text,
 } from '@chakra-ui/react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
 import { Document, Page } from 'react-pdf';
@@ -22,6 +22,7 @@ import { OnDocumentLoadSuccess, OnPageLoadSuccess } from 'react-pdf/dist/cjs/sha
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { useElementSize, useStep } from 'usehooks-ts';
+import InactivityContext from '../../../components/inactivity/InactivityContext';
 
 const FileViewModal = ({
   file,
@@ -33,6 +34,16 @@ const FileViewModal = ({
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
+  const { resetInactivityTimeout, setInactivityTimeout } = useContext(InactivityContext);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return () => {};
+    }
+    setInactivityTimeout(600);
+    return resetInactivityTimeout;
+  }, [isOpen, resetInactivityTimeout, setInactivityTimeout]);
+
   const [totalPages, setTotalPages] = useState(0);
   const [
     pageNumber,
