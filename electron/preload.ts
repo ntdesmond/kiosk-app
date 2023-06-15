@@ -30,7 +30,7 @@ const {
   VITE_API_ROOT: API_ROOT,
   VITE_API_USER: USER,
   VITE_API_PASSWORD: PASSWORD,
-} = import.meta.env;
+} = process.env as Record<string, string>;
 
 const api: API = {
   sendRequest: (telegram, subject, body) =>
