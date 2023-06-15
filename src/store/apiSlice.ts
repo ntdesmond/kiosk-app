@@ -9,11 +9,7 @@ import { authFailed, authRenewed } from './actions';
 import { AuthResponse, AuthBody, FileInfo } from './models';
 import { type RootState } from './store';
 
-const {
-  VITE_API_ROOT: API_ROOT,
-  VITE_API_USER: USER,
-  VITE_API_PASSWORD: PASSWORD,
-} = import.meta.env;
+const { API_ROOT, USER, PASSWORD } = window.electronAPI.filesConfig;
 
 export const baseQuery: BaseQueryFn = async (args, api, extraOptions) => {
   const queryWithAuth = fetchBaseQuery({

@@ -19,7 +19,18 @@ export const apiName = 'electronAPI';
 export type API = {
   sendRequest: (telegram: string, subject: string, body: string) => Promise<IpcVoidResult>;
   sendFeedback: (telegram: string, feedback: string) => Promise<IpcVoidResult>;
+  filesConfig: {
+    API_ROOT: string;
+    USER: string;
+    PASSWORD: string;
+  };
 };
+
+const {
+  VITE_API_ROOT: API_ROOT,
+  VITE_API_USER: USER,
+  VITE_API_PASSWORD: PASSWORD,
+} = import.meta.env;
 
 const api: API = {
   sendRequest: (telegram, subject, body) =>
@@ -36,6 +47,7 @@ const api: API = {
         feedback,
       )}</p>`,
     }),
+  filesConfig: { API_ROOT, USER, PASSWORD },
 };
 
 contextBridge.exposeInMainWorld(apiName, api);
