@@ -12,10 +12,19 @@
     "dist-electron",
     "dist"
   ],
-  "linux": {
-    "target": "AppImage",
-    "category": "Core",
-    "artifactName": "${productName}.${ext}"
+  "win": {
+    "target": [
+      {
+        "target": "nsis"
+      }
+    ],
+    "artifactName": "${productName}_${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
   },
   "publish": {
     "provider": "github"
