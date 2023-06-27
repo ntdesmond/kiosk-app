@@ -65,5 +65,8 @@
     "vite-plugin-electron-renderer": "^0.14.5",
     "vite-plugin-eslint2": "^3.3.0"
   },
+  "overrides": {
+    "canvas": "Automattic/node-canvas#pull/2235/head"
+  },
   "main": "dist-electron/main.js"
 }
