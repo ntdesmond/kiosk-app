@@ -25,6 +25,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Format and show diff
+        run: |
+          npm run format
+          git diff
+
       - name: Lint code
         run: npm run lint
 
