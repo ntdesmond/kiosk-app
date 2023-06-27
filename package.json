@@ -1,7 +1,7 @@
 {
   "name": "uni-feedback-kiosk-app",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Kiosk user interface application",
   "author": {
     "name": "ntdesmond",
@@ -27,6 +27,7 @@
     "framer-motion": "^10.12.16",
     "i18next": "^22.5.0",
     "minimist": "^1.2.8",
+    "node-addon-api": "^7.0.0",
     "nodemailer": "^6.9.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
