@@ -53,7 +53,7 @@ const Manuals = () => {
       <VStack align="stretch" spacing="8" height="100%">
         <Header title={t('manualsTitle')} />
         <SearchBar onChange={setFilter} />
-        <VStack align="stretch" minHeight="0" overflowY="auto">
+        <VStack align="stretch" minHeight="0" flex="1" overflowY="auto">
           {isLoading && (
             <Center>
               <Spinner size="xl" />
