@@ -17,10 +17,10 @@ const Menu = () => {
   return (
     <Grid templateRows="repeat(3, 1fr)" templateColumns="repeat(2, 1fr)" gap="10" height="100%">
       <GridItem colSpan={2}>
-        <MenuTile caption={t('manuals')} icon={MdQuestionAnswer} target="/manuals" />
+        <MenuTile caption={t('manuals')} icon={MdQuestionAnswer} target="/manuals" isLarge />
       </GridItem>
       <GridItem colSpan={2}>
-        <MenuTile caption={t('newRequest')} icon={MdCreate} target="/request" />
+        <MenuTile caption={t('newRequest')} icon={MdCreate} target="/request" isLarge />
       </GridItem>
       <GridItem>
         <MenuTile caption={t('contact')} icon={MdOutlineContactPage} target="/contact" />

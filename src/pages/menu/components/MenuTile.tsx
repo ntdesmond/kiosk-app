@@ -16,6 +16,7 @@ export interface MenuTileProps {
   icon: IconType;
   target: string;
   isDisabled?: boolean;
+  isLarge?: boolean;
 }
 
 const disabledOverlay: SystemStyleObject = {
@@ -26,15 +27,15 @@ const disabledOverlay: SystemStyleObject = {
   bgColor: 'rgba(255, 255, 255, 0.5)',
 };
 
-const MenuTile = ({ caption, icon, target, isDisabled }: MenuTileProps) => (
+const MenuTile = ({ caption, icon, target, isDisabled, isLarge }: MenuTileProps) => (
   <LinkBox height="100%" _before={isDisabled ? disabledOverlay : undefined}>
     <Card size="lg" variant="filled" bgColor="green.main" color="white" height="100%">
       <CardBody>
         <VStack justify="center" height="100%">
-          <Icon as={icon} boxSize={[24, null, null, 36, 48, 72]} />
+          <Icon as={icon} boxSize={{ base: 24, lg: 72 }} maxWidth="50%" />
           <LinkOverlay as={RouteLink} to={target} draggable={false}>
             <Heading
-              size={['md', null, null, 'lg', 'xl']}
+              size={{ base: 'md', lg: isLarge ? '2xl' : 'xl' }}
               textTransform="uppercase"
               textAlign="center"
             >
