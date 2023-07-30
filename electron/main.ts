@@ -3,17 +3,27 @@ import { autoUpdater } from 'electron-updater';
 import path from 'node:path';
 import minimist from 'minimist';
 import setupIpc from './ipc/setup';
+import { ipcMain } from './ipc/ipc';
 
 const dist_path = path.join(__dirname, '../dist');
 
-const { VITE_DEV_SERVER_URL } = process.env;
+const { VITE_DEV_SERVER_URL, VITE_NOUPDATE } = process.env;
+
+const updatesEnabled = VITE_NOUPDATE === undefined;
 
 const argv = minimist(process.argv.slice(process.argv.indexOf('--') + 1), {
-  default: { width: 1920, height: 1080, kiosk: true, relaunch: false, update: false, debug: false },
+  default: {
+    width: 1920,
+    height: 1080,
+    kiosk: true,
+    relaunch: false,
+    update: updatesEnabled,
+    debug: false,
+  },
   alias: { width: 'w', height: 'h' },
 });
 
-function createWindow() {
+const createWindow = () => {
   const window = new BrowserWindow({
     kiosk: argv.kiosk as boolean,
     fullscreen: argv.kiosk as boolean,
@@ -36,14 +46,23 @@ function createWindow() {
     window.loadFile(path.join(dist_path, 'index.html'));
   }
 
-  autoUpdater.autoDownload = true;
+  return window;
+};
+
+const configureUpdates = (window: BrowserWindow) => {
+  const shouldUpdate = argv.update as boolean;
+  autoUpdater.autoDownload = shouldUpdate;
   autoUpdater.autoInstallOnAppQuit = false;
-  if (argv.update as boolean) {
+  if (shouldUpdate) {
     const shouldRelaunch = argv.relaunch as boolean;
     autoUpdater.on('update-downloaded', () => autoUpdater.quitAndInstall(true, shouldRelaunch));
+  } else {
+    autoUpdater.on('update-available', (update) =>
+      ipcMain.send(window, 'notify-update', update.version),
+    );
   }
   autoUpdater.checkForUpdates();
-}
+};
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -57,5 +76,6 @@ app.on('web-contents-created', (_, contents) => {
 
 app.whenReady().then(() => {
   setupIpc();
-  createWindow();
+  const window = createWindow();
+  configureUpdates(window);
 });

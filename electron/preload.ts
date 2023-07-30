@@ -1,6 +1,6 @@
 import { contextBridge } from 'electron';
-import { IpcVoidResult } from './ipc/IpcResult';
-import invokeIpc from './ipc/invoke';
+import { type IpcResult } from './ipc/IpcResult';
+import { type IpcCallback, ipcRenderer } from './ipc/ipc';
 
 const htmlEscapeMap = {
   '>': '&gt;',
@@ -17,13 +17,15 @@ function escapeHTML(value: string) {
 export const apiName = 'electronAPI';
 
 export type API = {
-  sendRequest: (telegram: string, subject: string, body: string) => Promise<IpcVoidResult>;
-  sendFeedback: (telegram: string, feedback: string) => Promise<IpcVoidResult>;
+  sendRequest: (telegram: string, subject: string, body: string) => Promise<IpcResult<void>>;
+  sendFeedback: (telegram: string, feedback: string) => Promise<IpcResult<void>>;
   filesConfig: {
     API_ROOT: string;
     USER: string;
     PASSWORD: string;
   };
+  appVersion: Promise<IpcResult<string>>;
+  onUpdateAvailable: (callback: IpcCallback<string>) => void;
 };
 
 const {
@@ -34,20 +36,22 @@ const {
 
 const api: API = {
   sendRequest: (telegram, subject, body) =>
-    invokeIpc('send-mail', {
+    ipcRenderer.invoke('send-mail', {
       subject: `Request: ${subject}`,
       body: `<p>Telegram: <a href="https://t.me/${telegram}">@${telegram}</a></p><h2>Request: ${escapeHTML(
         subject,
       )}</h2><p>${escapeHTML(body)}</p>`,
     }),
   sendFeedback: (telegram, feedback) =>
-    invokeIpc('send-mail', {
+    ipcRenderer.invoke('send-mail', {
       subject: 'Feedback',
       body: `<p>Telegram: <a href="https://t.me/${telegram}">@${telegram}</a></p><h2>Feedback</h2><p>${escapeHTML(
         feedback,
       )}</p>`,
     }),
   filesConfig: { API_ROOT, USER, PASSWORD },
+  appVersion: ipcRenderer.invoke<void, string>('get-version'),
+  onUpdateAvailable: (callback: IpcCallback<string>) => ipcRenderer.on('notify-update', callback),
 };
 
 contextBridge.exposeInMainWorld(apiName, api);

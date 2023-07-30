@@ -1,20 +1,12 @@
-import { ipcMain } from 'electron';
+import { app } from 'electron';
 import sendMail from './sendMail';
-import { IpcResult, IpcVoidResult } from './IpcResult';
-import { IpcChannel } from './IpcChannel';
-
-type IpcHandler<TArg> = (
-  event: Electron.IpcMainInvokeEvent,
-  arg: TArg,
-) => Promise<IpcVoidResult> | Promise<IpcResult<unknown>>;
-
-const addHandler = <TArg>(channel: IpcChannel, handler: IpcHandler<TArg>) =>
-  ipcMain.handle(channel, handler);
+import { ipcMain } from './ipc';
 
 const setupIpc = () => {
-  addHandler<{ subject: string; body: string }>('send-mail', (_, { subject, body }) =>
+  ipcMain.handle<{ subject: string; body: string }, void>('send-mail', (_, { subject, body }) =>
     sendMail(subject, body),
   );
+  ipcMain.handle<void, string>('get-version', async () => ({ ok: true, data: app.getVersion() }));
 };
 
 export default setupIpc;
