@@ -45,7 +45,7 @@ const Version = () => {
     }
     const description = (
       <>
-        <Text>Downloading an update: {updateProgress}%</Text>
+        <Text>Downloading an update: {Math.round(updateProgress)}%</Text>
         <Progress colorScheme="teal" size="sm" borderRadius="md" value={updateProgress} />
       </>
     );
