@@ -56,6 +56,9 @@ const configureUpdates = (window: BrowserWindow) => {
   if (shouldUpdate) {
     const shouldRelaunch = argv.relaunch as boolean;
     autoUpdater.on('update-downloaded', () => autoUpdater.quitAndInstall(true, shouldRelaunch));
+    autoUpdater.on('download-progress', (progress) =>
+      ipcMain.send(window, 'downloading-update', progress.percent),
+    );
   } else {
     autoUpdater.on('update-available', (update) =>
       ipcMain.send(window, 'notify-update', update.version),

@@ -26,6 +26,7 @@ export type API = {
   };
   appVersion: Promise<IpcResult<string>>;
   onUpdateAvailable: (callback: IpcCallback<string>) => void;
+  onUpdateDownloading: (callback: IpcCallback<number>) => void;
 };
 
 const {
@@ -52,6 +53,8 @@ const api: API = {
   filesConfig: { API_ROOT, USER, PASSWORD },
   appVersion: ipcRenderer.invoke<void, string>('get-version'),
   onUpdateAvailable: (callback: IpcCallback<string>) => ipcRenderer.on('notify-update', callback),
+  onUpdateDownloading: (callback: IpcCallback<number>) =>
+    ipcRenderer.on('downloading-update', callback),
 };
 
 contextBridge.exposeInMainWorld(apiName, api);
